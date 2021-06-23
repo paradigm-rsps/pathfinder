@@ -9,7 +9,7 @@ private const val WALL_DECO_STRATEGY = 1
 private const val RECTANGLE_STRATEGY = 2
 private const val NO_STRATEGY = 3
 
-internal object DefaultReachStrategy : ReachStrategy {
+public object DefaultReachStrategy : ReachStrategy {
 
     override fun reached(
         flags: IntArray,
