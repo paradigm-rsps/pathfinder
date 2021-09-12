@@ -4,7 +4,6 @@ description = "A breadth-first search path finder"
 
 plugins {
     `maven-publish`
-    signing
     kotlin("jvm") version "1.4.0"
     id("me.champeau.gradle.jmh") version "0.5.2"
     id("org.jmailen.kotlinter") version "3.3.0"
@@ -12,11 +11,6 @@ plugins {
 
 repositories {
     mavenCentral()
-}
-
-allprojects {
-    apply(plugin = "maven-publish")
-    apply(plugin = "signing")
 }
 
 dependencies {
@@ -50,4 +44,22 @@ jmh {
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/blurite/pathfinder")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        register<MavenPublication>("gpr") {
+            from(components["java"])
+        }
+    }
 }
