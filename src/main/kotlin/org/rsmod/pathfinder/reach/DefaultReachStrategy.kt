@@ -1,5 +1,6 @@
 package org.rsmod.pathfinder.reach
 
+import org.rsmod.pathfinder.bound.reachExclusiveRectangle
 import org.rsmod.pathfinder.bound.reachRectangle
 import org.rsmod.pathfinder.bound.reachWall
 import org.rsmod.pathfinder.bound.reachWallDeco
@@ -8,6 +9,7 @@ private const val WALL_STRATEGY = 0
 private const val WALL_DECO_STRATEGY = 1
 private const val RECTANGLE_STRATEGY = 2
 private const val NO_STRATEGY = 3
+private const val RECTANGLE_EXCLUSIVE_STRATEGY = 4
 
 public object DefaultReachStrategy : ReachStrategy {
 
@@ -64,12 +66,25 @@ public object DefaultReachStrategy : ReachStrategy {
                 destWidth,
                 destHeight
             )
+            RECTANGLE_EXCLUSIVE_STRATEGY -> reachExclusiveRectangle(
+                flags,
+                searchMapSize,
+                accessBitMask,
+                localSrcX,
+                localSrcY,
+                localDestX,
+                localDestY,
+                srcSize,
+                destWidth,
+                destHeight
+            )
             else -> false
         }
     }
 
     private val Int.exitStrategy: Int
         get() = when {
+            this == -2 -> RECTANGLE_EXCLUSIVE_STRATEGY
             this == -1 -> NO_STRATEGY
             this in 0..3 || this == 9 -> WALL_STRATEGY
             this < 9 -> WALL_DECO_STRATEGY
