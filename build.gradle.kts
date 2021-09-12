@@ -52,8 +52,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/blurite/pathfinder")
             credentials {
-                username = project.findProperty("gpr.user") as String? ?: /*System.getenv("GITHUB_ACTOR")*/"z-kris"
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+                username = /*System.getenv("GITHUB_ACTOR")*/"z-kris"
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
