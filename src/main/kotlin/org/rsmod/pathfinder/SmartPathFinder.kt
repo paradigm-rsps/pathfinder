@@ -117,19 +117,19 @@ public class SmartPathFinder(
                 return Route(emptyList(), alternative = false, success = false)
             }
         }
-        val coordinates = ArrayList<RouteCoordinates>(255)
+        val coordinates = ArrayList<RouteCoordinates>(maxTurns)
         var nextDir = directions[currLocalX, currLocalY]
         var currDir = -1
         var turns = 0
         for (i in 0 until searchMapSize * searchMapSize) {
             if (currLocalX == localSrcX && currLocalY == localSrcY) break
-            val coords = RouteCoordinates(currLocalX + baseX, currLocalY + baseY)
             if (currDir != nextDir) {
                 turns++
-                coordinates.add(0, TURN_COORDS)
+                val coords = RouteCoordinates(currLocalX + baseX, currLocalY + baseY)
+                coordinates.add(coords)
                 currDir = nextDir
+                if (coordinates.size >= maxTurns) break
             }
-            coordinates.add(0, coords)
             if ((currDir and DirectionFlag.EAST) != 0) {
                 currLocalX++
             } else if ((currDir and DirectionFlag.WEST) != 0) {
@@ -142,26 +142,7 @@ public class SmartPathFinder(
             }
             nextDir = directions[currLocalX, currLocalY]
         }
-        return if (turns > maxTurns) {
-            val filtered = ArrayList<RouteCoordinates>(coordinates.size - turns)
-            var currTurns = 0
-            for (coords in coordinates) {
-                if (currTurns > maxTurns) break
-                if (coords == TURN_COORDS) {
-                    currTurns++
-                    continue
-                }
-                filtered.add(coords)
-            }
-            Route(filtered, alternative = !pathFound, success = true)
-        } else {
-            val filtered = ArrayList<RouteCoordinates>(coordinates.size - turns)
-            coordinates.forEach { coords ->
-                if (coords == TURN_COORDS) return@forEach
-                filtered.add(coords)
-            }
-            Route(filtered, alternative = !pathFound, success = true)
-        }
+        return Route(coordinates, alternative = !pathFound, success = true)
     }
 
     private fun findPath1(
