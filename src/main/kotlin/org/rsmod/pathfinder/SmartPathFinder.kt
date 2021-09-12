@@ -142,7 +142,7 @@ public class SmartPathFinder(
             }
             nextDir = directions[currLocalX, currLocalY]
         }
-        return Route(coordinates, alternative = !pathFound, success = true)
+        return Route(coordinates.asReversed(), alternative = !pathFound, success = true)
     }
 
     private fun findPath1(
