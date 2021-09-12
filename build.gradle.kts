@@ -52,7 +52,7 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/blurite/pathfinder")
             credentials {
-                username = /*System.getenv("GITHUB_ACTOR")*/"z-kris"
+                username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
