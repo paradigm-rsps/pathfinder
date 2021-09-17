@@ -82,6 +82,10 @@ public class ProjectileValidator(public val searchMapSize: Int = DEFAULT_SEARCH_
 
         val coords = mutableListOf<RouteCoordinates>()
 
+        // If the two rectangles provided are colliding, return as successful to avoid throwing exceptions.
+        if (collides(srcX, srcY, destX, destY, srcSize, destWidth, destHeight))
+            return Route(coords, alternative = false, success = true)
+
         if (abs(deltaX) > abs(deltaY)) {
             val offsetX = if (travelEast) 1 else -1
             val offsetY = if (travelNorth) 0 else -1
@@ -130,6 +134,27 @@ public class ProjectileValidator(public val searchMapSize: Int = DEFAULT_SEARCH_
             }
         }
         return Route(coords, alternative = false, success = true)
+    }
+
+    private fun collides(
+        srcX: Int,
+        srcY: Int,
+        destX: Int,
+        destY: Int,
+        srcSize: Int,
+        destWidth: Int,
+        destHeight: Int
+    ): Boolean {
+        // Is our eastern side to the west of the target's western side?
+        if (srcX + srcSize < destX) return false
+        // Is our northern side to the south of the target's southern side?
+        if (srcY + srcSize < destY) return false
+        // Is our western side to the east of the target's eastern side?
+        if (srcX > destX + destWidth) return false
+        // Is our southern side to the north of the target's northern side?
+        if (srcY > destY + destHeight) return false
+        // If none of the four checks return false, the two rectangles must be colliding
+        return true
     }
 
     private fun coordinate(a: Int, b: Int, size: Int): Int {
