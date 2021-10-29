@@ -31,7 +31,18 @@ internal fun reachExclusiveRectangle(
             destHeight
         )
     }
-    else ->
-        RectangleBoundaryUtils
-            .reachRectangle1(flags, mapSize, accessBitMask, srcX, srcY, destX, destY, destWidth, destHeight)
+    else -> {
+        if (RectangleBoundaryUtils.collides(srcX, srcY, destX, destY, srcSize, srcSize, destWidth, destHeight)) false
+        else RectangleBoundaryUtils.reachRectangle1(
+            flags,
+            mapSize,
+            accessBitMask,
+            srcX,
+            srcY,
+            destX,
+            destY,
+            destWidth,
+            destHeight
+        )
+    }
 }
