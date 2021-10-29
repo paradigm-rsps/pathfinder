@@ -27,11 +27,12 @@ public object DefaultReachStrategy : ReachStrategy {
         accessBitMask: Int,
         searchMapSize: Int
     ): Boolean {
-        if (localSrcX == localDestX && localSrcY == localDestY) {
+        val exitStrategy = shape.exitStrategy
+        if (exitStrategy != RECTANGLE_EXCLUSIVE_STRATEGY && localSrcX == localDestX && localSrcY == localDestY) {
             return true
         }
 
-        return when (shape.exitStrategy) {
+        return when (exitStrategy) {
             WALL_STRATEGY -> reachWall(
                 flags,
                 searchMapSize,
