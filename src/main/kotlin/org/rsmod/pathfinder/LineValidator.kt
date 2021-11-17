@@ -227,10 +227,18 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         private const val SIGHT_BLOCKED_SOUTH = OBJECT_PROJECTILE_BLOCKER or WALL_SOUTH_PROJECTILE_BLOCKER
         private const val SIGHT_BLOCKED_WEST = OBJECT_PROJECTILE_BLOCKER or WALL_WEST_PROJECTILE_BLOCKER
 
-        private const val WALK_BLOCKED_NORTH = CollisionFlag.BLOCK_NORTH
-        private const val WALK_BLOCKED_EAST = CollisionFlag.BLOCK_EAST
-        private const val WALK_BLOCKED_SOUTH = CollisionFlag.BLOCK_SOUTH
-        private const val WALK_BLOCKED_WEST = CollisionFlag.BLOCK_WEST
+        private const val WALK_BLOCKED_NORTH =
+            CollisionFlag.WALL_NORTH or CollisionFlag.OBJECT or CollisionFlag.FLOOR_DECORATION or
+                CollisionFlag.UNKNOWN_BIT_20 or CollisionFlag.FLOOR
+        private const val WALK_BLOCKED_EAST =
+            CollisionFlag.WALL_EAST or CollisionFlag.OBJECT or CollisionFlag.FLOOR_DECORATION or
+                CollisionFlag.UNKNOWN_BIT_20 or CollisionFlag.FLOOR
+        private const val WALK_BLOCKED_SOUTH =
+            CollisionFlag.WALL_SOUTH or CollisionFlag.OBJECT or CollisionFlag.FLOOR_DECORATION or
+                CollisionFlag.UNKNOWN_BIT_20 or CollisionFlag.FLOOR
+        private const val WALK_BLOCKED_WEST =
+            CollisionFlag.WALL_WEST or CollisionFlag.OBJECT or CollisionFlag.FLOOR_DECORATION or
+                CollisionFlag.UNKNOWN_BIT_20 or CollisionFlag.FLOOR
 
         private const val SCALE = 16
         private val HALF_TILE = scaleUp(tiles = 1) / 2
