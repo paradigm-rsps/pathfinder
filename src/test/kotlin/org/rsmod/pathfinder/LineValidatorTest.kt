@@ -12,9 +12,9 @@ import org.rsmod.pathfinder.flag.CollisionFlag
 import java.util.stream.Stream
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class ProjectileValidatorTest {
+class LineValidatorTest {
 
-    private val validator = ProjectileValidator(DEFAULT_SEARCH_MAP_SIZE)
+    private val validator = LineValidator(DEFAULT_SEARCH_MAP_SIZE)
 
     private val flags = IntArray(validator.searchMapSize * validator.searchMapSize)
 
@@ -25,7 +25,7 @@ class ProjectileValidatorTest {
     fun validateEmptyPath() {
         val src = RouteCoordinates(3200, 3200)
         val dest = src.translate(3, 0)
-        val validPath = validator.isValid(
+        val validPath = validator.hasLineOfSight(
             flags,
             src.x,
             src.y,
@@ -45,7 +45,7 @@ class ProjectileValidatorTest {
         val flagY = halfMap + dir.offY
         flags[(flagY * validator.searchMapSize) + flagX] = flag
 
-        val validPath = validator.isValid(
+        val validPath = validator.hasLineOfSight(
             flags,
             src.x,
             src.y,

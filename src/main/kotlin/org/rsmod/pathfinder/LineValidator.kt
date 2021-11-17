@@ -23,6 +23,7 @@
 
 package org.rsmod.pathfinder
 
+import org.rsmod.pathfinder.flag.CollisionFlag
 import org.rsmod.pathfinder.flag.CollisionFlag.OBJECT_PROJECTILE_BLOCKER
 import org.rsmod.pathfinder.flag.CollisionFlag.WALL_EAST_PROJECTILE_BLOCKER
 import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH_PROJECTILE_BLOCKER
@@ -31,9 +32,9 @@ import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_PROJECTILE_BLOCKER
 import kotlin.math.abs
 
 /* original RuneLite code revised by Scu11 */
-public class ProjectileValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SIZE) {
+public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SIZE) {
 
-    public fun isValid(
+    public fun hasLineOfSight(
         flags: IntArray,
         srcX: Int,
         srcY: Int,
@@ -43,11 +44,24 @@ public class ProjectileValidator(public val searchMapSize: Int = DEFAULT_SEARCH_
         destWidth: Int = 0,
         destHeight: Int = 0
     ): Boolean {
-        val route = rayCast(flags, srcX, srcY, destX, destY, srcSize, destWidth, destHeight)
+        val route = rayCast(
+            flags,
+            srcX,
+            srcY,
+            destX,
+            destY,
+            srcSize,
+            destWidth,
+            destHeight,
+            SIGHT_BLOCKED_WEST,
+            SIGHT_BLOCKED_EAST,
+            SIGHT_BLOCKED_SOUTH,
+            SIGHT_BLOCKED_NORTH
+        )
         return route.success
     }
 
-    public fun rayCast(
+    public fun hasLineOfWalk(
         flags: IntArray,
         srcX: Int,
         srcY: Int,
@@ -56,6 +70,37 @@ public class ProjectileValidator(public val searchMapSize: Int = DEFAULT_SEARCH_
         srcSize: Int = 1,
         destWidth: Int = 0,
         destHeight: Int = 0
+    ): Boolean {
+        val route = rayCast(
+            flags,
+            srcX,
+            srcY,
+            destX,
+            destY,
+            srcSize,
+            destWidth,
+            destHeight,
+            WALK_BLOCKED_WEST,
+            WALK_BLOCKED_EAST,
+            WALK_BLOCKED_SOUTH,
+            WALK_BLOCKED_NORTH
+        )
+        return route.success
+    }
+
+    private fun rayCast(
+        flags: IntArray,
+        srcX: Int,
+        srcY: Int,
+        destX: Int,
+        destY: Int,
+        srcSize: Int = 1,
+        destWidth: Int = 0,
+        destHeight: Int = 0,
+        flagWest: Int,
+        flagEast: Int,
+        flagSouth: Int,
+        flagNorth: Int,
     ): Route {
         val halfMap = searchMapSize / 2
         val baseX = srcX - halfMap
@@ -77,8 +122,8 @@ public class ProjectileValidator(public val searchMapSize: Int = DEFAULT_SEARCH_
         val travelEast = deltaX >= 0
         val travelNorth = deltaY >= 0
 
-        val xFlags = if (travelEast) BLOCKED_WEST else BLOCKED_EAST
-        val yFlags = if (travelNorth) BLOCKED_SOUTH else BLOCKED_NORTH
+        val xFlags = if (travelEast) flagWest else flagEast
+        val yFlags = if (travelNorth) flagSouth else flagNorth
 
         val coords = mutableListOf<RouteCoordinates>()
 
@@ -177,10 +222,15 @@ public class ProjectileValidator(public val searchMapSize: Int = DEFAULT_SEARCH_
 
     private companion object {
 
-        private const val BLOCKED_NORTH = OBJECT_PROJECTILE_BLOCKER or WALL_NORTH_PROJECTILE_BLOCKER
-        private const val BLOCKED_EAST = OBJECT_PROJECTILE_BLOCKER or WALL_EAST_PROJECTILE_BLOCKER
-        private const val BLOCKED_SOUTH = OBJECT_PROJECTILE_BLOCKER or WALL_SOUTH_PROJECTILE_BLOCKER
-        private const val BLOCKED_WEST = OBJECT_PROJECTILE_BLOCKER or WALL_WEST_PROJECTILE_BLOCKER
+        private const val SIGHT_BLOCKED_NORTH = OBJECT_PROJECTILE_BLOCKER or WALL_NORTH_PROJECTILE_BLOCKER
+        private const val SIGHT_BLOCKED_EAST = OBJECT_PROJECTILE_BLOCKER or WALL_EAST_PROJECTILE_BLOCKER
+        private const val SIGHT_BLOCKED_SOUTH = OBJECT_PROJECTILE_BLOCKER or WALL_SOUTH_PROJECTILE_BLOCKER
+        private const val SIGHT_BLOCKED_WEST = OBJECT_PROJECTILE_BLOCKER or WALL_WEST_PROJECTILE_BLOCKER
+
+        private const val WALK_BLOCKED_NORTH = CollisionFlag.BLOCK_NORTH
+        private const val WALK_BLOCKED_EAST = CollisionFlag.BLOCK_EAST
+        private const val WALK_BLOCKED_SOUTH = CollisionFlag.BLOCK_SOUTH
+        private const val WALK_BLOCKED_WEST = CollisionFlag.BLOCK_WEST
 
         private const val SCALE = 16
         private val HALF_TILE = scaleUp(tiles = 1) / 2
