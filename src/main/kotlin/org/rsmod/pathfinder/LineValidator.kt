@@ -56,7 +56,8 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
             SIGHT_BLOCKED_WEST,
             SIGHT_BLOCKED_EAST,
             SIGHT_BLOCKED_SOUTH,
-            SIGHT_BLOCKED_NORTH
+            SIGHT_BLOCKED_NORTH,
+            true
         )
         return route.success
     }
@@ -83,7 +84,8 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
             WALK_BLOCKED_WEST,
             WALK_BLOCKED_EAST,
             WALK_BLOCKED_SOUTH,
-            WALK_BLOCKED_NORTH
+            WALK_BLOCKED_NORTH,
+            false
         )
         return route.success
     }
@@ -101,6 +103,7 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         flagEast: Int,
         flagSouth: Int,
         flagNorth: Int,
+        los: Boolean,
     ): Route {
         val halfMap = searchMapSize / 2
         val baseX = srcX - halfMap
@@ -113,7 +116,8 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         val startX = coordinate(localSrcX, localDestX, srcSize)
         val startY = coordinate(localSrcY, localDestY, srcSize)
 
-        if (flags.isFlagged(startX, startY, CollisionFlag.OBJECT)) return Route(emptyList(), alternative = false, success = false)
+        if (los && flags.isFlagged(startX, startY, CollisionFlag.OBJECT))
+            return Route(emptyList(), alternative = false, success = false)
 
         val endX = coordinate(localDestX, localSrcX, destWidth)
         val endY = coordinate(localDestY, localSrcY, destHeight)
