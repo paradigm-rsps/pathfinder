@@ -113,8 +113,12 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         val startX = coordinate(localSrcX, localDestX, srcSize)
         val startY = coordinate(localSrcY, localDestY, srcSize)
 
+        if (flags.isFlagged(startX, startY, CollisionFlag.OBJECT)) return Route(emptyList(), alternative = false, success = false)
+
         val endX = coordinate(localDestX, localSrcX, destWidth)
         val endY = coordinate(localDestY, localSrcY, destHeight)
+
+        if (startX == endX && startY == endY) return Route(emptyList(), alternative = false, success = true)
 
         val deltaX = endX - startX
         val deltaY = endY - startY
@@ -126,10 +130,6 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         val yFlags = if (travelNorth) flagSouth else flagNorth
 
         val coords = mutableListOf<RouteCoordinates>()
-
-        // If the two rectangles provided are colliding, return as successful to avoid throwing exceptions.
-        if (collides(srcX, srcY, destX, destY, srcSize, destWidth, destHeight))
-            return Route(coords, alternative = false, success = true)
 
         if (abs(deltaX) > abs(deltaY)) {
             val offsetX = if (travelEast) 1 else -1
