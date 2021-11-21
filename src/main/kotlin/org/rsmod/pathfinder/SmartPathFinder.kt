@@ -5,7 +5,6 @@ import org.rsmod.pathfinder.flag.CollisionFlag
 import org.rsmod.pathfinder.flag.DirectionFlag
 import org.rsmod.pathfinder.reach.ReachStrategy
 import java.util.Arrays
-import kotlin.math.abs
 
 private const val DEFAULT_RESET_ON_SEARCH = true
 internal const val DEFAULT_SEARCH_MAP_SIZE = 128
@@ -113,7 +112,7 @@ public class SmartPathFinder(
         if (!pathFound) {
             if (!moveNear) {
                 return Route(emptyList(), alternative = false, success = false)
-            } else if (!findClosestApproachPoint(localSrcX, localSrcY, localDestX, localDestY)) {
+            } else if (!findClosestApproachPoint(localSrcX, localSrcY, localDestX, localDestY, destWidth, destHeight)) {
                 return Route(emptyList(), alternative = false, success = false)
             }
         }
@@ -608,7 +607,9 @@ public class SmartPathFinder(
         localSrcX: Int,
         localSrcY: Int,
         localDestX: Int,
-        localDestY: Int
+        localDestY: Int,
+        width: Int,
+        length: Int,
     ): Boolean {
         var lowestCost = MAX_ALTERNATIVE_ROUTE_LOWEST_COST
         var maxAlternativePath = MAX_ALTERNATIVE_ROUTE_SEEK_RANGE
@@ -623,8 +624,22 @@ public class SmartPathFinder(
                 ) {
                     continue
                 }
-                val dx = abs(localDestX - x)
-                val dy = abs(localDestY - y)
+
+                val dx = if (x < localDestX) {
+                    localDestX - x
+                } else if (x > localDestX + width - 1) {
+                    x - (width + localDestX - 1)
+                } else {
+                    0
+                }
+
+                val dy = if (y < localDestY) {
+                    localDestY - y
+                } else if (y > localDestY + length - 1) {
+                    y - (localDestY + length - 1)
+                } else {
+                    0
+                }
                 val cost = dx * dx + dy * dy
                 if (cost < lowestCost || (cost == lowestCost && maxAlternativePath > distances[x, y])) {
                     currLocalX = x
