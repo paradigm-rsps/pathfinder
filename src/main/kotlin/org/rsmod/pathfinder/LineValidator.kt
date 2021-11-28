@@ -130,8 +130,8 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         val travelEast = deltaX >= 0
         val travelNorth = deltaY >= 0
 
-        val xFlags = if (travelEast) flagWest else flagEast
-        val yFlags = if (travelNorth) flagSouth else flagNorth
+        var xFlags = if (travelEast) flagWest else flagEast
+        var yFlags = if (travelNorth) flagSouth else flagNorth
 
         val coords = mutableListOf<RouteCoordinates>()
 
@@ -147,6 +147,7 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
                 currX += offsetX
                 val currY = scaleDown(scaledY)
 
+                if (los && currX == endX && currY == endY) xFlags = xFlags and OBJECT_PROJECTILE_BLOCKER.inv()
                 if (flags.isFlagged(currX, currY, xFlags)) {
                     return Route(coords, alternative = false, success = false)
                 }
@@ -154,6 +155,7 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
                 scaledY += tangent
 
                 val nextY = scaleDown(scaledY)
+                if (los && currX == endX && nextY == endY) yFlags = yFlags and OBJECT_PROJECTILE_BLOCKER.inv()
                 if (nextY != currY && flags.isFlagged(currX, nextY, yFlags)) {
                     return Route(coords, alternative = false, success = false)
                 }
@@ -169,7 +171,7 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
             while (currY != endY) {
                 currY += offsetY
                 val currX = scaleDown(scaledX)
-
+                if (los && currX == endX && currY == endY) yFlags = yFlags and OBJECT_PROJECTILE_BLOCKER.inv()
                 if (flags.isFlagged(currX, currY, yFlags)) {
                     return Route(coords, alternative = false, success = false)
                 }
@@ -177,6 +179,7 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
                 scaledX += tangent
 
                 val nextX = scaleDown(scaledX)
+                if (los && nextX == endX && currY == endY) xFlags = xFlags and OBJECT_PROJECTILE_BLOCKER.inv()
                 if (nextX != currX && flags.isFlagged(nextX, currY, xFlags)) {
                     return Route(coords, alternative = false, success = false)
                 }
