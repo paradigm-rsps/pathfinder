@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.rsmod.pathfinder.DEFAULT_SEARCH_MAP_SIZE
-import org.rsmod.pathfinder.DumbPathFinder
 import org.rsmod.pathfinder.RouteCoordinates
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.flag.CollisionFlag
@@ -28,26 +27,6 @@ class CollisionStrategyTest {
     @Test
     fun smartInverseFlagBlock() {
         val pf = SmartPathFinder()
-        val (src, dest, flags) = invalidPath()
-        val route = pf.findPath(flags, src.x, src.y, dest.x, dest.y, collision = InverseBlockFlagCollision(BLOCK_FLAG))
-        Assertions.assertTrue(route.failed)
-        Assertions.assertTrue(route.isEmpty())
-    }
-
-    @Test
-    fun dumbInverseFlagPass() {
-        val pf = DumbPathFinder()
-        val (src, dest, flags) = validPath()
-        val route = pf.findPath(flags, src.x, src.y, dest.x, dest.y, collision = InverseBlockFlagCollision(BLOCK_FLAG))
-        Assertions.assertTrue(route.success)
-        Assertions.assertTrue(route.isNotEmpty())
-        Assertions.assertEquals(dest.x, route.last().x)
-        Assertions.assertEquals(dest.y, route.last().y)
-    }
-
-    @Test
-    fun dumbInverseFlagBlock() {
-        val pf = DumbPathFinder()
         val (src, dest, flags) = invalidPath()
         val route = pf.findPath(flags, src.x, src.y, dest.x, dest.y, collision = InverseBlockFlagCollision(BLOCK_FLAG))
         Assertions.assertTrue(route.failed)
