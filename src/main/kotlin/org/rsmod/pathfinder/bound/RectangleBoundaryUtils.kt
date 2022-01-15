@@ -1,6 +1,7 @@
 package org.rsmod.pathfinder.bound
 
 import org.rsmod.pathfinder.flag.CollisionFlag
+import kotlin.math.max
 import kotlin.math.min
 
 /**
@@ -77,64 +78,36 @@ internal object RectangleBoundaryUtils {
         val srcNorth = srcHeight + srcY
         val destEast = destWidth + destX
         val destNorth = destHeight + destY
-        if (srcX in destX until destEast) {
-            if (destY == srcNorth && (accessBitMask and 0x4) == 0) {
-                val minEast = min(srcEast, destEast)
-                for (x in srcX until minEast) {
-                    if ((flag(flags, mapSize, x, srcNorth - 1) and CollisionFlag.WALL_NORTH) == 0) {
-                        return true
-                    }
-                }
-            } else if (destNorth == srcY && (accessBitMask and 0x1) == 0) {
-                val minEastX = min(srcEast, destEast)
-                for (x in srcX until minEastX) {
-                    if ((flag(flags, mapSize, x, srcY) and CollisionFlag.WALL_SOUTH) == 0) {
-                        return true
-                    }
+        if (destEast == srcX && (accessBitMask and 0x2) == 0) {
+            val fromY = max(srcY, destY)
+            val toY = min(srcNorth, destNorth)
+            for (y in fromY until toY) {
+                if (flag(flags, mapSize, destEast - 1, y) and CollisionFlag.WALL_EAST == 0) {
+                    return true
                 }
             }
-        } else if (srcEast in (destX + 1)..destEast) {
-            if (destY == srcNorth && (accessBitMask and 0x4) == 0) {
-                for (x in destX until srcEast) {
-                    if ((flag(flags, mapSize, x, srcNorth - 1) and CollisionFlag.WALL_NORTH) == 0) {
-                        return true
-                    }
-                }
-            } else if (srcY == destNorth && (accessBitMask and 0x1) == 0) {
-                for (x in destX until srcEast) {
-                    if ((flag(flags, mapSize, x, srcY) and CollisionFlag.WALL_NORTH) == 0) {
-                        return true
-                    }
+        } else if (srcEast == destX && (accessBitMask and 0x8) == 0) {
+            val fromY = max(srcY, destY)
+            val toY = min(srcNorth, destNorth)
+            for (y in fromY until toY) {
+                if (flag(flags, mapSize, destX, y) and CollisionFlag.WALL_WEST == 0) {
+                    return true
                 }
             }
-        } else if (srcY in destY until destNorth) {
-            if (srcEast == destX && (accessBitMask and 0x8) == 0) {
-                val minNorthY = min(srcNorth, destNorth)
-                for (y in srcY until minNorthY) {
-                    if ((flag(flags, mapSize, srcEast - 1, y) and CollisionFlag.WALL_EAST) == 0) {
-                        return true
-                    }
-                }
-            } else if (destEast == srcX && (accessBitMask and 0x2) == 0) {
-                val minNorthY = min(srcNorth, destNorth)
-                for (y in srcY until minNorthY) {
-                    if ((flag(flags, mapSize, srcX, y) and CollisionFlag.WALL_WEST) == 0) {
-                        return true
-                    }
+        } else if (srcY == destNorth && (accessBitMask and 0x1) == 0) {
+            val fromX = max(srcX, destX)
+            val toX = min(srcEast, destEast)
+            for (x in fromX until toX) {
+                if (flag(flags, mapSize, x, destNorth - 1) and CollisionFlag.WALL_NORTH == 0) {
+                    return true
                 }
             }
-        } else if (srcNorth in (destY + 1)..destNorth) {
-            if (destX == srcEast && (accessBitMask and 0x8) == 0) {
-                for (y in destY until srcNorth) {
-                    if ((flag(flags, mapSize, srcEast - 1, y) and CollisionFlag.WALL_EAST) == 0) {
-                        return true
-                    }
-                }
-            } else if (destEast == srcX && (accessBitMask and 0x2) == 0) {
-                for (y in destY until srcNorth) {
-                    if ((flag(flags, mapSize, srcX, y) and CollisionFlag.WALL_WEST) == 0) {
-                        return true
-                    }
+        } else if (destY == srcNorth && (accessBitMask and 0x4) == 0) {
+            val fromX = max(srcX, destX)
+            val toX = min(srcEast, destEast)
+            for (x in fromX until toX) {
+                if (flag(flags, mapSize, x, destY) and CollisionFlag.WALL_SOUTH == 0) {
+                    return true
                 }
             }
         }
