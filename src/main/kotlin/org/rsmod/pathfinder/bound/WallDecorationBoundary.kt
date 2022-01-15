@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package org.rsmod.pathfinder.bound
 
 import org.rsmod.pathfinder.flag.CollisionFlag

@@ -1,5 +1,6 @@
 package org.rsmod.pathfinder.bound
 
+import org.rsmod.pathfinder.flag.AccessBitFlag
 import org.rsmod.pathfinder.flag.CollisionFlag
 import kotlin.math.max
 import kotlin.math.min
@@ -42,23 +43,23 @@ internal object RectangleBoundaryUtils {
 
         if (srcX == destX - 1 && srcY >= destY && srcY <= north &&
             (flag(flags, mapSize, srcX, srcY) and CollisionFlag.WALL_EAST) == 0 &&
-            (accessBitMask and 0x8) == 0
+            (accessBitMask and AccessBitFlag.BLOCK_WEST) == 0
         ) return true
 
         if (srcX == east + 1 && srcY >= destY && srcY <= north &&
             (flag(flags, mapSize, srcX, srcY) and CollisionFlag.WALL_WEST) == 0 &&
-            (accessBitMask and 0x2) == 0
+            (accessBitMask and AccessBitFlag.BLOCK_EAST) == 0
         ) return true
 
         if (srcY + 1 == destY && srcX >= destX && srcX <= east &&
             (flag(flags, mapSize, srcX, srcY) and CollisionFlag.WALL_NORTH) == 0 &&
-            (accessBitMask and 0x4) == 0
+            (accessBitMask and AccessBitFlag.BLOCK_SOUTH) == 0
 
         ) return true
 
         return srcY == north + 1 && srcX >= destX && srcX <= east &&
             (flag(flags, mapSize, srcX, srcY) and CollisionFlag.WALL_SOUTH) == 0 &&
-            (accessBitMask and 0x1) == 0
+            (accessBitMask and AccessBitFlag.BLOCK_NORTH) == 0
     }
 
     fun reachRectangleN(
@@ -78,7 +79,7 @@ internal object RectangleBoundaryUtils {
         val srcNorth = srcHeight + srcY
         val destEast = destWidth + destX
         val destNorth = destHeight + destY
-        if (destEast == srcX && (accessBitMask and 0x2) == 0) {
+        if (destEast == srcX && (accessBitMask and AccessBitFlag.BLOCK_EAST) == 0) {
             val fromY = max(srcY, destY)
             val toY = min(srcNorth, destNorth)
             for (y in fromY until toY) {
@@ -86,7 +87,7 @@ internal object RectangleBoundaryUtils {
                     return true
                 }
             }
-        } else if (srcEast == destX && (accessBitMask and 0x8) == 0) {
+        } else if (srcEast == destX && (accessBitMask and AccessBitFlag.BLOCK_WEST) == 0) {
             val fromY = max(srcY, destY)
             val toY = min(srcNorth, destNorth)
             for (y in fromY until toY) {
@@ -94,7 +95,7 @@ internal object RectangleBoundaryUtils {
                     return true
                 }
             }
-        } else if (srcY == destNorth && (accessBitMask and 0x1) == 0) {
+        } else if (srcY == destNorth && (accessBitMask and AccessBitFlag.BLOCK_NORTH) == 0) {
             val fromX = max(srcX, destX)
             val toX = min(srcEast, destEast)
             for (x in fromX until toX) {
@@ -102,7 +103,7 @@ internal object RectangleBoundaryUtils {
                     return true
                 }
             }
-        } else if (destY == srcNorth && (accessBitMask and 0x4) == 0) {
+        } else if (destY == srcNorth && (accessBitMask and AccessBitFlag.BLOCK_SOUTH) == 0) {
             val fromX = max(srcX, destX)
             val toX = min(srcEast, destEast)
             for (x in fromX until toX) {
