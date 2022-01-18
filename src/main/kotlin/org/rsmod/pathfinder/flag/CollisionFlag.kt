@@ -42,71 +42,133 @@ public object CollisionFlag {
     private const val FLOOR_BLOCKED = FLOOR or FLOOR_DECORATION
 
     /* Mixed masks of the above flags */
-    public const val BLOCK_WEST: Int = WALL_EAST_ROUTE_BLOCKER or
-        OBJECT_ROUTE_BLOCKER or
+    public const val BLOCK_WEST: Int = WALL_EAST or
+        OBJECT or
         FLOOR_BLOCKED
 
-    public const val BLOCK_EAST: Int = WALL_WEST_ROUTE_BLOCKER or
-        OBJECT_ROUTE_BLOCKER or
+    public const val BLOCK_EAST: Int = WALL_WEST or
+        OBJECT or
         FLOOR_BLOCKED
 
-    public const val BLOCK_SOUTH: Int = WALL_NORTH_ROUTE_BLOCKER or
-        OBJECT_ROUTE_BLOCKER or
+    public const val BLOCK_SOUTH: Int = WALL_NORTH or
+        OBJECT or
         FLOOR_BLOCKED
 
-    public const val BLOCK_NORTH: Int = WALL_SOUTH_ROUTE_BLOCKER or
-        OBJECT_ROUTE_BLOCKER or
+    public const val BLOCK_NORTH: Int = WALL_SOUTH or
+        OBJECT or
         FLOOR_BLOCKED
 
-    public const val BLOCK_SOUTH_WEST: Int = WALL_NORTH_ROUTE_BLOCKER or
+    public const val BLOCK_SOUTH_WEST: Int = WALL_NORTH or
+        WALL_NORTH_EAST or
+        WALL_EAST or
+        OBJECT or
+        FLOOR_BLOCKED
+
+    public const val BLOCK_SOUTH_EAST: Int = WALL_NORTH_WEST or
+        WALL_NORTH or
+        WALL_WEST or
+        OBJECT or
+        FLOOR_BLOCKED
+
+    public const val BLOCK_NORTH_WEST: Int = WALL_EAST or
+        WALL_SOUTH_EAST or
+        WALL_SOUTH or
+        OBJECT or
+        FLOOR_BLOCKED
+
+    public const val BLOCK_NORTH_EAST: Int = WALL_SOUTH or
+        WALL_SOUTH_WEST or
+        WALL_WEST or
+        OBJECT or
+        FLOOR_BLOCKED
+
+    public const val BLOCK_NORTH_AND_SOUTH_EAST: Int = WALL_NORTH or
+        WALL_NORTH_EAST or
+        WALL_EAST or
+        WALL_SOUTH_EAST or
+        WALL_SOUTH or
+        OBJECT or
+        FLOOR_BLOCKED
+
+    public const val BLOCK_NORTH_AND_SOUTH_WEST: Int = WALL_NORTH_WEST or
+        WALL_NORTH or
+        WALL_SOUTH or
+        WALL_SOUTH_WEST or
+        WALL_WEST or
+        OBJECT or
+        FLOOR_BLOCKED
+
+    public const val BLOCK_NORTH_EAST_AND_WEST: Int = WALL_NORTH_WEST or
+        WALL_NORTH or
+        WALL_NORTH_EAST or
+        WALL_EAST or
+        WALL_WEST or
+        OBJECT or
+        FLOOR_BLOCKED
+
+    public const val BLOCK_SOUTH_EAST_AND_WEST: Int = WALL_EAST or
+        WALL_SOUTH_EAST or
+        WALL_SOUTH or
+        WALL_SOUTH_WEST or
+        WALL_WEST or
+        OBJECT or
+        FLOOR_BLOCKED
+
+    /* Route blocker flags. These are used in ~550+ clients to generate paths through bankers and such. */
+    public const val BLOCK_WEST_ROUTE_BLOCKER: Int = WALL_EAST_ROUTE_BLOCKER or
+        OBJECT_ROUTE_BLOCKER or
+        FLOOR_BLOCKED
+    public const val BLOCK_EAST_ROUTE_BLOCKER: Int = WALL_WEST_ROUTE_BLOCKER or
+        OBJECT_ROUTE_BLOCKER or
+        FLOOR_BLOCKED
+    public const val BLOCK_SOUTH_ROUTE_BLOCKER: Int = WALL_NORTH_ROUTE_BLOCKER or
+        OBJECT_ROUTE_BLOCKER or
+        FLOOR_BLOCKED
+    public const val BLOCK_NORTH_ROUTE_BLOCKER: Int = WALL_SOUTH_ROUTE_BLOCKER or
+        OBJECT_ROUTE_BLOCKER or
+        FLOOR_BLOCKED
+    public const val BLOCK_SOUTH_WEST_ROUTE_BLOCKER: Int = WALL_NORTH_ROUTE_BLOCKER or
         WALL_NORTH_EAST_ROUTE_BLOCKER or
         WALL_EAST_ROUTE_BLOCKER or
         OBJECT_ROUTE_BLOCKER or
         FLOOR_BLOCKED
-
-    public const val BLOCK_SOUTH_EAST: Int = WALL_NORTH_WEST_ROUTE_BLOCKER or
+    public const val BLOCK_SOUTH_EAST_ROUTE_BLOCKER: Int = WALL_NORTH_WEST_ROUTE_BLOCKER or
         WALL_NORTH_ROUTE_BLOCKER or
         WALL_WEST_ROUTE_BLOCKER or
         OBJECT_ROUTE_BLOCKER or
         FLOOR_BLOCKED
-
-    public const val BLOCK_NORTH_WEST: Int = WALL_EAST_ROUTE_BLOCKER or
+    public const val BLOCK_NORTH_WEST_ROUTE_BLOCKER: Int = WALL_EAST_ROUTE_BLOCKER or
         WALL_SOUTH_EAST_ROUTE_BLOCKER or
         WALL_SOUTH_ROUTE_BLOCKER or
         OBJECT_ROUTE_BLOCKER or
         FLOOR_BLOCKED
-
-    public const val BLOCK_NORTH_EAST: Int = WALL_SOUTH_ROUTE_BLOCKER or
+    public const val BLOCK_NORTH_EAST_ROUTE_BLOCKER: Int = WALL_SOUTH_ROUTE_BLOCKER or
         WALL_SOUTH_WEST_ROUTE_BLOCKER or
         WALL_WEST_ROUTE_BLOCKER or
         OBJECT_ROUTE_BLOCKER or
         FLOOR_BLOCKED
-
-    public const val BLOCK_NORTH_AND_SOUTH_EAST: Int = WALL_NORTH_ROUTE_BLOCKER or
+    public const val BLOCK_NORTH_AND_SOUTH_EAST_ROUTE_BLOCKER: Int = WALL_NORTH_ROUTE_BLOCKER or
         WALL_NORTH_EAST_ROUTE_BLOCKER or
         WALL_EAST_ROUTE_BLOCKER or
         WALL_SOUTH_EAST_ROUTE_BLOCKER or
         WALL_SOUTH_ROUTE_BLOCKER or
         OBJECT_ROUTE_BLOCKER or
         FLOOR_BLOCKED
-
-    public const val BLOCK_NORTH_AND_SOUTH_WEST: Int = WALL_NORTH_WEST_ROUTE_BLOCKER or
+    public const val BLOCK_NORTH_AND_SOUTH_WEST_ROUTE_BLOCKER: Int = WALL_NORTH_WEST_ROUTE_BLOCKER or
         WALL_NORTH_ROUTE_BLOCKER or
         WALL_SOUTH_ROUTE_BLOCKER or
         WALL_SOUTH_WEST_ROUTE_BLOCKER or
         WALL_WEST_ROUTE_BLOCKER or
         OBJECT_ROUTE_BLOCKER or
         FLOOR_BLOCKED
-
-    public const val BLOCK_NORTH_EAST_AND_WEST: Int = WALL_NORTH_WEST_ROUTE_BLOCKER or
+    public const val BLOCK_NORTH_EAST_AND_WEST_ROUTE_BLOCKER: Int = WALL_NORTH_WEST_ROUTE_BLOCKER or
         WALL_NORTH_ROUTE_BLOCKER or
         WALL_NORTH_EAST_ROUTE_BLOCKER or
         WALL_EAST_ROUTE_BLOCKER or
         WALL_WEST_ROUTE_BLOCKER or
         OBJECT_ROUTE_BLOCKER or
         FLOOR_BLOCKED
-
-    public const val BLOCK_SOUTH_EAST_AND_WEST: Int = WALL_EAST_ROUTE_BLOCKER or
+    public const val BLOCK_SOUTH_EAST_AND_WEST_ROUTE_BLOCKER: Int = WALL_EAST_ROUTE_BLOCKER or
         WALL_SOUTH_EAST_ROUTE_BLOCKER or
         WALL_SOUTH_ROUTE_BLOCKER or
         WALL_SOUTH_WEST_ROUTE_BLOCKER or
