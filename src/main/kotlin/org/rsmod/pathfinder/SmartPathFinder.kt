@@ -913,7 +913,10 @@ public class SmartPathFinder(
             dirFlag = DirectionFlag.SOUTH_WEST
             if (currLocalX < relativeSearchSize && currLocalY < relativeSearchSize && directions[x, y] == 0 &&
                 collision.canMove(flags[x, currLocalY + 2], CollisionFlag.BLOCK_NORTH_WEST_ROUTE_BLOCKER) &&
-                collision.canMove(flags[currLocalX + 2, currLocalY + 2], CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER) &&
+                collision.canMove(
+                        flags[currLocalX + 2, currLocalY + 2],
+                        CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER
+                    ) &&
                 collision.canMove(flags[currLocalX + 2, y], CollisionFlag.BLOCK_SOUTH_EAST_ROUTE_BLOCKER)
             ) {
                 setNextValidLocalCoords(x, y, dirFlag, nextDistance)
@@ -985,7 +988,10 @@ public class SmartPathFinder(
             dirFlag = DirectionFlag.WEST
             if (currLocalX < relativeSearchSize && directions[x, y] == 0 &&
                 collision.canMove(flags[currLocalX + srcSize, y], CollisionFlag.BLOCK_SOUTH_EAST_ROUTE_BLOCKER) &&
-                collision.canMove(flags[currLocalX + srcSize, currLocalY + srcSize - 1], CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER)
+                collision.canMove(
+                        flags[currLocalX + srcSize, currLocalY + srcSize - 1],
+                        CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER
+                    )
             ) {
                 val clipFlag = CollisionFlag.BLOCK_NORTH_AND_SOUTH_WEST_ROUTE_BLOCKER
                 val blocked = (1 until srcSize - 1).any {
@@ -1017,7 +1023,10 @@ public class SmartPathFinder(
             dirFlag = DirectionFlag.SOUTH
             if (currLocalY < relativeSearchSize && directions[x, y] == 0 &&
                 collision.canMove(flags[x, currLocalY + srcSize], CollisionFlag.BLOCK_NORTH_WEST_ROUTE_BLOCKER) &&
-                collision.canMove(flags[currLocalX + srcSize - 1, currLocalY + srcSize], CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER)
+                collision.canMove(
+                        flags[currLocalX + srcSize - 1, currLocalY + srcSize],
+                        CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER
+                    )
             ) {
                 val clipFlag = CollisionFlag.BLOCK_SOUTH_EAST_AND_WEST_ROUTE_BLOCKER
                 val blocked =
@@ -1054,7 +1063,10 @@ public class SmartPathFinder(
             if (currLocalX < relativeSearchSize && currLocalY > 0 && directions[x, y] == 0 &&
                 collision.canMove(flags[x, y], CollisionFlag.BLOCK_SOUTH_WEST_ROUTE_BLOCKER) &&
                 collision.canMove(flags[currLocalX + srcSize, y], CollisionFlag.BLOCK_SOUTH_EAST_ROUTE_BLOCKER) &&
-                collision.canMove(flags[currLocalX + srcSize, currLocalY + srcSize - 2], CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER)
+                collision.canMove(
+                        flags[currLocalX + srcSize, currLocalY + srcSize - 2],
+                        CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER
+                    )
             ) {
                 val clipFlag1 = CollisionFlag.BLOCK_NORTH_AND_SOUTH_WEST_ROUTE_BLOCKER
                 val clipFlag2 = CollisionFlag.BLOCK_NORTH_EAST_AND_WEST_ROUTE_BLOCKER
@@ -1093,7 +1105,10 @@ public class SmartPathFinder(
             dirFlag = DirectionFlag.SOUTH_WEST
             if (currLocalX < relativeSearchSize && currLocalY < relativeSearchSize && directions[x, y] == 0 &&
                 collision.canMove(flags[x, currLocalY + srcSize], CollisionFlag.BLOCK_NORTH_WEST_ROUTE_BLOCKER) &&
-                collision.canMove(flags[currLocalX + srcSize, currLocalY + srcSize], CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER) &&
+                collision.canMove(
+                        flags[currLocalX + srcSize, currLocalY + srcSize],
+                        CollisionFlag.BLOCK_NORTH_EAST_ROUTE_BLOCKER
+                    ) &&
                 collision.canMove(flags[currLocalX + srcSize, y], CollisionFlag.BLOCK_SOUTH_EAST_ROUTE_BLOCKER)
             ) {
                 val clipFlag1 = CollisionFlag.BLOCK_SOUTH_EAST_AND_WEST_ROUTE_BLOCKER
