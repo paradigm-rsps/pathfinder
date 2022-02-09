@@ -6,7 +6,7 @@ import org.rsmod.pathfinder.flag.CollisionFlag
 
 internal fun reachWall(
     flags: Array<IntArray?>,
-    defaultFlags: IntArray,
+    defaultFlag: Int,
     baseX: Int,
     baseY: Int,
     z: Int,
@@ -23,7 +23,7 @@ internal fun reachWall(
         srcSize + localDestY - 1 >= localDestY -> true
     srcSize == 1 -> reachWall1(
         flags,
-        defaultFlags,
+        defaultFlag,
         baseX,
         baseY,
         z,
@@ -36,7 +36,7 @@ internal fun reachWall(
     )
     else -> reachWallN(
         flags,
-        defaultFlags,
+        defaultFlag,
         baseX,
         baseY,
         z,
@@ -52,7 +52,7 @@ internal fun reachWall(
 
 private fun reachWall1(
     flags: Array<IntArray?>,
-    defaultFlags: IntArray,
+    defaultFlag: Int,
     baseX: Int,
     baseY: Int,
     z: Int,
@@ -70,40 +70,40 @@ private fun reachWall1(
                     if (localSrcX == localDestX - 1 && localSrcY == localDestY)
                         return true
                     if (localSrcX == localDestX && localSrcY == localDestY + 1 &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
                     ) return true
                     if (localSrcX == localDestX && localSrcY == localDestY - 1 &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_SOUTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_SOUTH) == 0
                     ) return true
                 }
                 1 -> {
                     if (localSrcX == localDestX && localSrcY == localDestY + 1)
                         return true
                     if (localSrcX == localDestX - 1 && localSrcY == localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_WEST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_WEST) == 0
                     ) return true
                     if (localSrcX == localDestX + 1 && localSrcY == localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_EAST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_EAST) == 0
                     ) return true
                 }
                 2 -> {
                     if (localSrcX == localDestX + 1 && localSrcY == localDestY)
                         return true
                     if (localSrcX == localDestX && localSrcY == localDestY + 1 &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
                     ) return true
                     if (localSrcX == localDestX && localSrcY == localDestY - 1 &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_SOUTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_SOUTH) == 0
                     ) return true
                 }
                 3 -> {
                     if (localSrcX == localDestX && localSrcY == localDestY - 1)
                         return true
                     if (localSrcX == localDestX - 1 && localSrcY == localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_WEST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_WEST) == 0
                     ) return true
                     if (localSrcX == localDestX + 1 && localSrcY == localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_EAST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_EAST) == 0
                     ) return true
                 }
             }
@@ -116,30 +116,30 @@ private fun reachWall1(
                     if (localSrcX == localDestX && localSrcY == localDestY + 1)
                         return true
                     if (localSrcX == localDestX + 1 && localSrcY == localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_EAST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_EAST) == 0
                     ) return true
                     if (localSrcX == localDestX && localSrcY == localDestY - 1 &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_SOUTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_SOUTH) == 0
                     ) return true
                 }
                 1 -> {
                     if (localSrcX == localDestX - 1 && localSrcY == localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_WEST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_WEST) == 0
                     ) return true
                     if (localSrcX == localDestX && localSrcY == localDestY + 1)
                         return true
                     if (localSrcX == localDestX + 1 && localSrcY == localDestY)
                         return true
                     if (localSrcX == localDestX && localSrcY == localDestY - 1 &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_SOUTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_SOUTH) == 0
                     ) return true
                 }
                 2 -> {
                     if (localSrcX == localDestX - 1 && localSrcY == localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_WEST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_WEST) == 0
                     ) return true
                     if (localSrcX == localDestX && localSrcY == localDestY + 1 &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
                     ) return true
                     if (localSrcX == localDestX + 1 && localSrcY == localDestY)
                         return true
@@ -150,10 +150,10 @@ private fun reachWall1(
                     if (localSrcX == localDestX - 1 && localSrcY == localDestY)
                         return true
                     if (localSrcX == localDestX && localSrcY == localDestY + 1 &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
                     ) return true
                     if (localSrcX == localDestX + 1 && localSrcY == localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_EAST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.BLOCK_EAST) == 0
                     ) return true
                     if (localSrcX == localDestX && localSrcY == localDestY - 1)
                         return true
@@ -162,17 +162,17 @@ private fun reachWall1(
         }
         9 -> {
             if (localSrcX == localDestX && localSrcY == localDestY + 1 &&
-                (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.WALL_SOUTH) == 0
+                (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.WALL_SOUTH) == 0
             ) return true
             if (localSrcX == localDestX && localSrcY == localDestY - 1 &&
-                (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.WALL_NORTH) == 0
+                (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.WALL_NORTH) == 0
             ) return true
             if (localSrcX == localDestX - 1 && localSrcY == localDestY &&
-                (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.WALL_EAST) == 0
+                (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.WALL_EAST) == 0
             ) return true
 
             return localSrcX == localDestX + 1 && localSrcY == localDestY &&
-                (flags[defaultFlags, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.WALL_WEST) == 0
+                (flags[defaultFlag, baseX, baseY, localSrcX, localSrcY, z] and CollisionFlag.WALL_WEST) == 0
         }
     }
     return false
@@ -180,7 +180,7 @@ private fun reachWall1(
 
 private fun reachWallN(
     flags: Array<IntArray?>,
-    defaultFlags: IntArray,
+    defaultFlag: Int,
     baseX: Int,
     baseY: Int,
     z: Int,
@@ -201,40 +201,40 @@ private fun reachWallN(
                     if (localSrcX == localDestX - srcSize && localSrcY <= localDestY && north >= localDestY)
                         return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY + 1 &&
-                        (flags[defaultFlags, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
                     ) return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY - srcSize &&
-                        (flags[defaultFlags, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
                     ) return true
                 }
                 1 -> {
                     if (localDestX in localSrcX..east && localSrcY == localDestY + 1)
                         return true
                     if (localSrcX == localDestX - srcSize && localSrcY <= localDestY && north >= localDestY &&
-                        (flags[defaultFlags, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
+                        (flags[defaultFlag, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
                     ) return true
                     if (localSrcX == localDestX + 1 && localSrcY <= localDestY && north >= localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
                     ) return true
                 }
                 2 -> {
                     if (localSrcX == localDestX + 1 && localSrcY <= localDestY && north >= localDestY)
                         return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY + 1 &&
-                        (flags[defaultFlags, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
                     ) return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY - srcSize &&
-                        (flags[defaultFlags, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
                     ) return true
                 }
                 3 -> {
                     if (localDestX in localSrcX..east && localSrcY == localDestY - srcSize)
                         return true
                     if (localSrcX == localDestX - srcSize && localSrcY <= localDestY && north >= localDestY &&
-                        (flags[defaultFlags, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
+                        (flags[defaultFlag, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
                     ) return true
                     if (localSrcX == localDestX + 1 && localSrcY <= localDestY && north >= localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
                     ) return true
                 }
             }
@@ -247,30 +247,30 @@ private fun reachWallN(
                     if (localDestX in localSrcX..east && localSrcY == localDestY + 1)
                         return true
                     if (localSrcX == localDestX + 1 && localSrcY <= localDestY && north >= localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
                     ) return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY - srcSize &&
-                        (flags[defaultFlags, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
                     ) return true
                 }
                 1 -> {
                     if (localSrcX == localDestX - srcSize && localSrcY <= localDestY && north >= localDestY &&
-                        (flags[defaultFlags, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
+                        (flags[defaultFlag, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
                     ) return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY + 1)
                         return true
                     if (localSrcX == localDestX + 1 && localSrcY <= localDestY && north >= localDestY)
                         return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY - srcSize &&
-                        (flags[defaultFlags, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
                     ) return true
                 }
                 2 -> {
                     if (localSrcX == localDestX - srcSize && localSrcY <= localDestY && north >= localDestY &&
-                        (flags[defaultFlags, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
+                        (flags[defaultFlag, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
                     ) return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY + 1 &&
-                        (flags[defaultFlags, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
                     ) return true
                     if (localSrcX == localDestX + 1 && localSrcY <= localDestY && north >= localDestY)
                         return true
@@ -281,10 +281,10 @@ private fun reachWallN(
                     if (localSrcX == localDestX - srcSize && localSrcY <= localDestY && north >= localDestY)
                         return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY + 1 &&
-                        (flags[defaultFlags, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
+                        (flags[defaultFlag, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
                     ) return true
                     if (localSrcX == localDestX + 1 && localSrcY <= localDestY && north >= localDestY &&
-                        (flags[defaultFlags, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
+                        (flags[defaultFlag, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
                     ) return true
                     if (localDestX in localSrcX..east && localSrcY == localDestY - srcSize)
                         return true
@@ -293,17 +293,17 @@ private fun reachWallN(
         }
         9 -> {
             if (localDestX in localSrcX..east && localSrcY == localDestY + 1 &&
-                (flags[defaultFlags, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
+                (flags[defaultFlag, baseX, baseY, localDestX, localSrcY, z] and CollisionFlag.BLOCK_NORTH) == 0
             ) return true
             if (localDestX in localSrcX..east && localSrcY == localDestY - srcSize &&
-                (flags[defaultFlags, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
+                (flags[defaultFlag, baseX, baseY, localDestX, north, z] and CollisionFlag.BLOCK_SOUTH) == 0
             ) return true
             if (localSrcX == localDestX - srcSize && localSrcY <= localDestY && north >= localDestY &&
-                (flags[defaultFlags, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
+                (flags[defaultFlag, baseX, baseY, east, localDestY, z] and CollisionFlag.BLOCK_WEST) == 0
             ) return true
 
             return localSrcX == localDestX + 1 && localSrcY <= localDestY && north >= localDestY &&
-                (flags[defaultFlags, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
+                (flags[defaultFlag, baseX, baseY, localSrcX, localDestY, z] and CollisionFlag.BLOCK_EAST) == 0
         }
     }
     return false
@@ -311,7 +311,7 @@ private fun reachWallN(
 
 @Suppress("NOTHING_TO_INLINE")
 private inline operator fun Array<IntArray?>.get(
-    defaultFlags: IntArray,
+    defaultFlag: Int,
     baseX: Int,
     baseY: Int,
     localX: Int,
@@ -320,7 +320,7 @@ private inline operator fun Array<IntArray?>.get(
 ): Int {
     val x = baseX + localX
     val y = baseY + localY
-    val zone = this[getZoneIndex(x, y, z)] ?: defaultFlags
+    val zone = this[getZoneIndex(x, y, z)] ?: return defaultFlag
     return zone[getIndexInZone(x, y)]
 }
 

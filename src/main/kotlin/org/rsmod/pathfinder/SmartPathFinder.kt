@@ -31,7 +31,7 @@ public class SmartPathFinder(
     private var currLocalY: Int = 0,
     private val useRouteBlockerFlags: Boolean = false,
     private val flags: Array<IntArray?>,
-    private val defaultFlags: IntArray,
+    private val defaultFlag: Int,
 ) : PathFinder {
 
     public override fun findPath(
@@ -224,7 +224,7 @@ public class SmartPathFinder(
 
             if (reachStrategy.reached(
                     flags,
-                    defaultFlags,
+                    defaultFlag,
                     baseX,
                     baseY,
                     z,
@@ -362,7 +362,7 @@ public class SmartPathFinder(
 
             if (reachStrategy.reached(
                     flags,
-                    defaultFlags,
+                    defaultFlag,
                     baseX,
                     baseY,
                     z,
@@ -513,7 +513,7 @@ public class SmartPathFinder(
 
             if (reachStrategy.reached(
                     flags,
-                    defaultFlags,
+                    defaultFlag,
                     baseX,
                     baseY,
                     z,
@@ -740,7 +740,7 @@ public class SmartPathFinder(
 
             if (reachStrategy.reached(
                     flags,
-                    defaultFlags,
+                    defaultFlag,
                     baseX,
                     baseY,
                     z,
@@ -878,7 +878,7 @@ public class SmartPathFinder(
 
             if (reachStrategy.reached(
                     flags,
-                    defaultFlags,
+                    defaultFlag,
                     baseX,
                     baseY,
                     z,
@@ -1062,7 +1062,7 @@ public class SmartPathFinder(
 
             if (reachStrategy.reached(
                     flags,
-                    defaultFlags,
+                    defaultFlag,
                     baseX,
                     baseY,
                     z,
@@ -1367,7 +1367,7 @@ public class SmartPathFinder(
     private inline operator fun Array<IntArray?>.get(baseX: Int, baseY: Int, localX: Int, localY: Int, z: Int): Int {
         val x = baseX + localX
         val y = baseY + localY
-        val zone = this[getZoneIndex(x, y, z)] ?: defaultFlags
+        val zone = this[getZoneIndex(x, y, z)] ?: return defaultFlag
         return zone[getIndexInZone(x, y)]
     }
 

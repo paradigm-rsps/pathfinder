@@ -2,7 +2,7 @@ package org.rsmod.pathfinder.bound
 
 internal fun reachRectangle(
     flags: Array<IntArray?>,
-    defaultFlags: IntArray,
+    defaultFlag: Int,
     baseX: Int,
     baseY: Int,
     z: Int,
@@ -20,7 +20,7 @@ internal fun reachRectangle(
             .collides(localSrcX, localSrcY, localDestX, localDestY, srcSize, srcSize, destWidth, destHeight) ||
             RectangleBoundaryUtils.reachRectangleN(
                 flags,
-                defaultFlags,
+                defaultFlag,
                 baseX,
                 baseY,
                 z,
@@ -37,7 +37,7 @@ internal fun reachRectangle(
     }
     else -> RectangleBoundaryUtils.reachRectangle1(
         flags,
-        defaultFlags,
+        defaultFlag,
         baseX,
         baseY,
         z,
