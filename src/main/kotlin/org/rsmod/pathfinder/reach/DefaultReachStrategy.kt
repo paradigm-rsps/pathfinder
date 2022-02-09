@@ -14,7 +14,11 @@ private const val RECTANGLE_EXCLUSIVE_STRATEGY = 4
 public object DefaultReachStrategy : ReachStrategy {
 
     override fun reached(
-        flags: IntArray,
+        flags: Array<IntArray?>,
+        defaultFlags: IntArray,
+        baseX: Int,
+        baseY: Int,
+        z: Int,
         localSrcX: Int,
         localSrcY: Int,
         localDestX: Int,
@@ -25,7 +29,6 @@ public object DefaultReachStrategy : ReachStrategy {
         rotation: Int,
         shape: Int,
         accessBitMask: Int,
-        searchMapSize: Int
     ): Boolean {
         val exitStrategy = shape.exitStrategy
         if (exitStrategy != RECTANGLE_EXCLUSIVE_STRATEGY && localSrcX == localDestX && localSrcY == localDestY) {
@@ -35,7 +38,10 @@ public object DefaultReachStrategy : ReachStrategy {
         return when (exitStrategy) {
             WALL_STRATEGY -> reachWall(
                 flags,
-                searchMapSize,
+                defaultFlags,
+                baseX,
+                baseY,
+                z,
                 localSrcX,
                 localSrcY,
                 localDestX,
@@ -46,7 +52,10 @@ public object DefaultReachStrategy : ReachStrategy {
             )
             WALL_DECO_STRATEGY -> reachWallDeco(
                 flags,
-                searchMapSize,
+                defaultFlags,
+                baseX,
+                baseY,
+                z,
                 localSrcX,
                 localSrcY,
                 localDestX,
@@ -57,7 +66,10 @@ public object DefaultReachStrategy : ReachStrategy {
             )
             RECTANGLE_STRATEGY -> reachRectangle(
                 flags,
-                searchMapSize,
+                defaultFlags,
+                baseX,
+                baseY,
+                z,
                 accessBitMask,
                 localSrcX,
                 localSrcY,
@@ -69,7 +81,10 @@ public object DefaultReachStrategy : ReachStrategy {
             )
             RECTANGLE_EXCLUSIVE_STRATEGY -> reachExclusiveRectangle(
                 flags,
-                searchMapSize,
+                defaultFlags,
+                baseX,
+                baseY,
+                z,
                 accessBitMask,
                 localSrcX,
                 localSrcY,

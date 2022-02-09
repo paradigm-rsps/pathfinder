@@ -17,11 +17,11 @@ private const val DEFAULT_ACCESS_BITMASK = 0
 public interface PathFinder {
 
     public fun findPath(
-        flags: IntArray,
         srcX: Int,
         srcY: Int,
         destX: Int,
         destY: Int,
+        z: Int,
         srcSize: Int = DEFAULT_SRC_SIZE,
         destWidth: Int = DEFAULT_DEST_WIDTH,
         destHeight: Int = DEFAULT_DEST_HEIGHT,

@@ -25,8 +25,11 @@ internal object RectangleBoundaryUtils {
     }
 
     fun reachRectangle1(
-        flags: IntArray,
-        mapSize: Int,
+        flags: Array<IntArray?>,
+        defaultFlags: IntArray,
+        baseX: Int,
+        baseY: Int,
+        z: Int,
         accessBitMask: Int,
         srcX: Int,
         srcY: Int,
@@ -42,29 +45,32 @@ internal object RectangleBoundaryUtils {
             return false
 
         if (srcX == destX - 1 && srcY >= destY && srcY <= north &&
-            (flag(flags, mapSize, srcX, srcY) and CollisionFlag.WALL_EAST) == 0 &&
+            (flags[defaultFlags, baseX, baseY, srcX, srcY, z] and CollisionFlag.WALL_EAST) == 0 &&
             (accessBitMask and AccessBitFlag.BLOCK_WEST) == 0
         ) return true
 
         if (srcX == east + 1 && srcY >= destY && srcY <= north &&
-            (flag(flags, mapSize, srcX, srcY) and CollisionFlag.WALL_WEST) == 0 &&
+            (flags[defaultFlags, baseX, baseY, srcX, srcY, z] and CollisionFlag.WALL_WEST) == 0 &&
             (accessBitMask and AccessBitFlag.BLOCK_EAST) == 0
         ) return true
 
         if (srcY + 1 == destY && srcX >= destX && srcX <= east &&
-            (flag(flags, mapSize, srcX, srcY) and CollisionFlag.WALL_NORTH) == 0 &&
+            (flags[defaultFlags, baseX, baseY, srcX, srcY, z] and CollisionFlag.WALL_NORTH) == 0 &&
             (accessBitMask and AccessBitFlag.BLOCK_SOUTH) == 0
 
         ) return true
 
         return srcY == north + 1 && srcX >= destX && srcX <= east &&
-            (flag(flags, mapSize, srcX, srcY) and CollisionFlag.WALL_SOUTH) == 0 &&
+            (flags[defaultFlags, baseX, baseY, srcX, srcY, z] and CollisionFlag.WALL_SOUTH) == 0 &&
             (accessBitMask and AccessBitFlag.BLOCK_NORTH) == 0
     }
 
     fun reachRectangleN(
-        flags: IntArray,
-        mapSize: Int,
+        flags: Array<IntArray?>,
+        defaultFlags: IntArray,
+        baseX: Int,
+        baseY: Int,
+        z: Int,
         accessBitMask: Int,
         srcX: Int,
         srcY: Int,
@@ -83,7 +89,7 @@ internal object RectangleBoundaryUtils {
             val fromY = max(srcY, destY)
             val toY = min(srcNorth, destNorth)
             for (y in fromY until toY) {
-                if (flag(flags, mapSize, destEast - 1, y) and CollisionFlag.WALL_EAST == 0) {
+                if (flags[defaultFlags, baseX, baseY, destEast - 1, y, z] and CollisionFlag.WALL_EAST == 0) {
                     return true
                 }
             }
@@ -91,7 +97,7 @@ internal object RectangleBoundaryUtils {
             val fromY = max(srcY, destY)
             val toY = min(srcNorth, destNorth)
             for (y in fromY until toY) {
-                if (flag(flags, mapSize, destX, y) and CollisionFlag.WALL_WEST == 0) {
+                if (flags[defaultFlags, baseX, baseY, destX, y, z] and CollisionFlag.WALL_WEST == 0) {
                     return true
                 }
             }
@@ -99,7 +105,7 @@ internal object RectangleBoundaryUtils {
             val fromX = max(srcX, destX)
             val toX = min(srcEast, destEast)
             for (x in fromX until toX) {
-                if (flag(flags, mapSize, x, destNorth - 1) and CollisionFlag.WALL_NORTH == 0) {
+                if (flags[defaultFlags, baseX, baseY, x, destNorth - 1, z] and CollisionFlag.WALL_NORTH == 0) {
                     return true
                 }
             }
@@ -107,7 +113,7 @@ internal object RectangleBoundaryUtils {
             val fromX = max(srcX, destX)
             val toX = min(srcEast, destEast)
             for (x in fromX until toX) {
-                if (flag(flags, mapSize, x, destY) and CollisionFlag.WALL_SOUTH == 0) {
+                if (flags[defaultFlags, baseX, baseY, x, destY, z] and CollisionFlag.WALL_SOUTH == 0) {
                     return true
                 }
             }
@@ -115,7 +121,28 @@ internal object RectangleBoundaryUtils {
         return false
     }
 
-    private fun flag(flags: IntArray, width: Int, x: Int, y: Int): Int {
-        return flags[(y * width) + x]
+    @Suppress("NOTHING_TO_INLINE")
+    private inline operator fun Array<IntArray?>.get(
+        defaultFlags: IntArray,
+        baseX: Int,
+        baseY: Int,
+        localX: Int,
+        localY: Int,
+        z: Int
+    ): Int {
+        val x = baseX + localX
+        val y = baseY + localY
+        val zone = this[getZoneIndex(x, y, z)] ?: defaultFlags
+        return zone[getIndexInZone(x, y)]
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun getZoneIndex(x: Int, y: Int, z: Int): Int {
+        return (x and 0x7FF) or ((y and 0x7FF) shl 11) or ((z and 0x3) shl 22)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun getIndexInZone(x: Int, y: Int): Int {
+        return (x and 0x7) or ((y and 0x7) shl 3)
     }
 }

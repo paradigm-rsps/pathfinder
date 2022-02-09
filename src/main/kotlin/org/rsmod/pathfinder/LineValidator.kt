@@ -31,13 +31,16 @@ import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_PROJECTILE_BLOCKER
 import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_PROJECTILE_BLOCKER
 import kotlin.math.abs
 
-/* original RuneLite code revised by Scu11 */
-public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SIZE) {
+public class LineValidator(
+    public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SIZE,
+    private val flags: Array<IntArray?>,
+    private val defaultFlags: IntArray,
+) {
 
     public fun hasLineOfSight(
-        flags: IntArray,
         srcX: Int,
         srcY: Int,
+        z: Int,
         destX: Int,
         destY: Int,
         srcSize: Int = 1,
@@ -45,9 +48,9 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         destHeight: Int = 0
     ): Boolean {
         val route = rayCast(
-            flags,
             srcX,
             srcY,
+            z,
             destX,
             destY,
             srcSize,
@@ -63,9 +66,9 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
     }
 
     public fun hasLineOfWalk(
-        flags: IntArray,
         srcX: Int,
         srcY: Int,
+        z: Int,
         destX: Int,
         destY: Int,
         srcSize: Int = 1,
@@ -73,9 +76,9 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         destHeight: Int = 0
     ): Boolean {
         val route = rayCast(
-            flags,
             srcX,
             srcY,
+            z,
             destX,
             destY,
             srcSize,
@@ -91,9 +94,9 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
     }
 
     private fun rayCast(
-        flags: IntArray,
         srcX: Int,
         srcY: Int,
+        z: Int,
         destX: Int,
         destY: Int,
         srcSize: Int = 1,
@@ -116,7 +119,7 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         val startX = coordinate(localSrcX, localDestX, srcSize)
         val startY = coordinate(localSrcY, localDestY, srcSize)
 
-        if (los && flags.isFlagged(startX, startY, CollisionFlag.OBJECT))
+        if (los && flags.isFlagged(defaultFlags, baseX, baseY, startX, startY, z, CollisionFlag.OBJECT))
             return Route(emptyList(), alternative = false, success = false)
 
         val endX = coordinate(localDestX, localSrcX, destWidth)
@@ -148,7 +151,7 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
                 val currY = scaleDown(scaledY)
 
                 if (los && currX == endX && currY == endY) xFlags = xFlags and OBJECT_PROJECTILE_BLOCKER.inv()
-                if (flags.isFlagged(currX, currY, xFlags)) {
+                if (flags.isFlagged(defaultFlags, baseX, baseY, currX, currY, z, xFlags)) {
                     return Route(coords, alternative = false, success = false)
                 }
 
@@ -156,7 +159,7 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
 
                 val nextY = scaleDown(scaledY)
                 if (los && currX == endX && nextY == endY) yFlags = yFlags and OBJECT_PROJECTILE_BLOCKER.inv()
-                if (nextY != currY && flags.isFlagged(currX, nextY, yFlags)) {
+                if (nextY != currY && flags.isFlagged(defaultFlags, baseX, baseY, currX, nextY, z, yFlags)) {
                     return Route(coords, alternative = false, success = false)
                 }
             }
@@ -172,7 +175,7 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
                 currY += offsetY
                 val currX = scaleDown(scaledX)
                 if (los && currX == endX && currY == endY) yFlags = yFlags and OBJECT_PROJECTILE_BLOCKER.inv()
-                if (flags.isFlagged(currX, currY, yFlags)) {
+                if (flags.isFlagged(defaultFlags, baseX, baseY, currX, currY, z, yFlags)) {
                     return Route(coords, alternative = false, success = false)
                 }
 
@@ -180,33 +183,12 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
 
                 val nextX = scaleDown(scaledX)
                 if (los && nextX == endX && currY == endY) xFlags = xFlags and OBJECT_PROJECTILE_BLOCKER.inv()
-                if (nextX != currX && flags.isFlagged(nextX, currY, xFlags)) {
+                if (nextX != currX && flags.isFlagged(defaultFlags, baseX, baseY, nextX, currY, z, xFlags)) {
                     return Route(coords, alternative = false, success = false)
                 }
             }
         }
         return Route(coords, alternative = false, success = true)
-    }
-
-    private fun collides(
-        srcX: Int,
-        srcY: Int,
-        destX: Int,
-        destY: Int,
-        srcSize: Int,
-        destWidth: Int,
-        destHeight: Int
-    ): Boolean {
-        // Is our eastern side to the west of the target's western side?
-        if (srcX + srcSize < destX) return false
-        // Is our northern side to the south of the target's southern side?
-        if (srcY + srcSize < destY) return false
-        // Is our western side to the east of the target's eastern side?
-        if (srcX > destX + destWidth) return false
-        // Is our southern side to the north of the target's northern side?
-        if (srcY > destY + destHeight) return false
-        // If none of the four checks return false, the two rectangles must be colliding
-        return true
     }
 
     private fun coordinate(a: Int, b: Int, size: Int): Int {
@@ -217,8 +199,41 @@ public class LineValidator(public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SI
         }
     }
 
-    private fun IntArray.isFlagged(x: Int, y: Int, flags: Int): Boolean {
-        return (this[x, y] and flags) != 0
+    private fun Array<IntArray?>.isFlagged(
+        defaultFlags: IntArray,
+        baseX: Int,
+        baseY: Int,
+        x: Int,
+        y: Int,
+        z: Int,
+        flags: Int
+    ): Boolean {
+        return (this[defaultFlags, baseX, baseY, x, y, z] and flags) != 0
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline operator fun Array<IntArray?>.get(
+        defaultFlags: IntArray,
+        baseX: Int,
+        baseY: Int,
+        localX: Int,
+        localY: Int,
+        z: Int
+    ): Int {
+        val x = baseX + localX
+        val y = baseY + localY
+        val zone = this[getZoneIndex(x, y, z)] ?: defaultFlags
+        return zone[getIndexInZone(x, y)]
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun getZoneIndex(x: Int, y: Int, z: Int): Int {
+        return (x and 0x7FF) or ((y and 0x7FF) shl 11) or ((z and 0x3) shl 22)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun getIndexInZone(x: Int, y: Int): Int {
+        return (x and 0x7) or ((y and 0x7) shl 3)
     }
 
     @Suppress("NOTHING_TO_INLINE")

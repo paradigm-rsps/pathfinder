@@ -3,7 +3,11 @@ package org.rsmod.pathfinder.reach
 public interface ReachStrategy {
 
     public fun reached(
-        flags: IntArray,
+        flags: Array<IntArray?>,
+        defaultFlags: IntArray,
+        baseX: Int,
+        baseY: Int,
+        z: Int,
         localSrcX: Int,
         localSrcY: Int,
         localDestX: Int,
@@ -14,6 +18,5 @@ public interface ReachStrategy {
         rotation: Int,
         shape: Int,
         accessBitMask: Int,
-        searchMapSize: Int
     ): Boolean
 }

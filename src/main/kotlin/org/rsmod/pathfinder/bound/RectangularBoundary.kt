@@ -1,8 +1,11 @@
 package org.rsmod.pathfinder.bound
 
 internal fun reachRectangle(
-    flags: IntArray,
-    mapSize: Int,
+    flags: Array<IntArray?>,
+    defaultFlags: IntArray,
+    baseX: Int,
+    baseY: Int,
+    z: Int,
     accessBitMask: Int,
     localSrcX: Int,
     localSrcY: Int,
@@ -17,7 +20,10 @@ internal fun reachRectangle(
             .collides(localSrcX, localSrcY, localDestX, localDestY, srcSize, srcSize, destWidth, destHeight) ||
             RectangleBoundaryUtils.reachRectangleN(
                 flags,
-                mapSize,
+                defaultFlags,
+                baseX,
+                baseY,
+                z,
                 accessBitMask,
                 localSrcX,
                 localSrcY,
@@ -31,7 +37,10 @@ internal fun reachRectangle(
     }
     else -> RectangleBoundaryUtils.reachRectangle1(
         flags,
-        mapSize,
+        defaultFlags,
+        baseX,
+        baseY,
+        z,
         accessBitMask,
         localSrcX,
         localSrcY,
