@@ -51,9 +51,6 @@ public class SmartPathFinder(
         collision: CollisionStrategy,
         reachStrategy: ReachStrategy
     ): Route {
-        require(flags.size == directions.size) {
-            "Clipping flag size must be same size as [directions] and [distances]"
-        }
         if (resetOnSearch) {
             reset()
         }
