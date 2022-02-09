@@ -1370,7 +1370,7 @@ public class SmartPathFinder(
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun getZoneIndex(x: Int, y: Int, z: Int): Int {
-        return (x and 0x7FF) or ((y and 0x7FF) shl 11) or ((z and 0x3) shl 22)
+        return ((x shr 3) and 0x7FF) or (((y shr 3) and 0x7FF) shl 11) or ((z and 0x3) shl 22)
     }
 
     @Suppress("NOTHING_TO_INLINE")
