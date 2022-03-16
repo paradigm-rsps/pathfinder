@@ -18,6 +18,7 @@ private const val MAX_ALTERNATIVE_ROUTE_SEEK_RANGE = 100
 private const val MAX_ALTERNATIVE_ROUTE_DISTANCE_FROM_DESTINATION = 10
 private const val DEFAULT_MOVE_NEAR_FLAG = true
 private const val DEFAULT_ROUTE_BLOCKER_FLAGS = false
+private const val INITIAL_DEQUE_SIZE = 25
 
 public class SmartPathFinder(
     private val resetOnSearch: Boolean = DEFAULT_RESET_ON_SEARCH,
@@ -35,6 +36,7 @@ public class SmartPathFinder(
     private val flags: Array<IntArray?>,
     private val defaultFlag: Int,
     private val moveNear: Boolean = DEFAULT_MOVE_NEAR_FLAG,
+    private val initialDequeSize: Int = INITIAL_DEQUE_SIZE,
 ) : PathFinder {
 
     public override fun findPath(
@@ -175,7 +177,7 @@ public class SmartPathFinder(
                 return FAILED_ROUTE
             }
         }
-        val coordinates = ArrayDeque<RouteCoordinates>(maxTurns.inc())
+        val coordinates = ArrayDeque<RouteCoordinates>(initialDequeSize)
         var nextDir = directions[currLocalX, currLocalY]
         var currDir = -1
         var turns = 0
