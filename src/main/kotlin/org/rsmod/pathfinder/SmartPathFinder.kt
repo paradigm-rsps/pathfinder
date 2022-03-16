@@ -19,7 +19,7 @@ private const val MAX_ALTERNATIVE_ROUTE_DISTANCE_FROM_DESTINATION = 10
 
 public class SmartPathFinder(
     private val resetOnSearch: Boolean = DEFAULT_RESET_ON_SEARCH,
-    public val searchMapSize: Int = DEFAULT_SEARCH_MAP_SIZE,
+    private val searchMapSize: Int = DEFAULT_SEARCH_MAP_SIZE,
     private val ringBufferSize: Int = DEFAULT_RING_BUFFER_SIZE,
     private val directions: IntArray = IntArray(searchMapSize * searchMapSize),
     private val distances: IntArray = IntArray(searchMapSize * searchMapSize) { DEFAULT_DISTANCE_VALUE },
@@ -48,6 +48,7 @@ public class SmartPathFinder(
         moveNear: Boolean,
         accessBitMask: Int,
         maxTurns: Int,
+        extraFlagToCheck: Int,
         collision: CollisionStrategy,
         reachStrategy: ReachStrategy
     ): Route {
@@ -161,9 +162,9 @@ public class SmartPathFinder(
             }
         if (!pathFound) {
             if (!moveNear) {
-                return Route(emptyList(), alternative = false, success = false)
+                return FAILED_ROUTE
             } else if (!findClosestApproachPoint(localSrcX, localSrcY, localDestX, localDestY, destWidth, destHeight)) {
-                return Route(emptyList(), alternative = false, success = false)
+                return FAILED_ROUTE
             }
         }
         val coordinates = ArrayDeque<RouteCoordinates>(maxTurns.inc())
@@ -1376,5 +1377,9 @@ public class SmartPathFinder(
     @Suppress("NOTHING_TO_INLINE")
     private inline fun getIndexInZone(x: Int, y: Int): Int {
         return (x and 0x7) or ((y and 0x7) shl 3)
+    }
+
+    private companion object {
+        private val FAILED_ROUTE = Route(ArrayDeque(), alternative = false, success = false)
     }
 }

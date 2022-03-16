@@ -4,7 +4,7 @@ description = "A breadth-first search path finder"
 
 plugins {
     `maven-publish`
-    kotlin("jvm") version "1.4.0"
+    kotlin("jvm") version "1.6.10"
     id("me.champeau.gradle.jmh") version "0.5.2"
     id("org.jmailen.kotlinter") version "3.3.0"
 }
@@ -15,10 +15,10 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    jmh("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.3")
-    jmh("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0")
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.3")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
+    jmh("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+    jmh("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
 }
 
 kotlin {

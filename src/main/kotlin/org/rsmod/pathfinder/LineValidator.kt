@@ -120,12 +120,12 @@ public class LineValidator(
         val startY = coordinate(localSrcY, localDestY, srcSize)
 
         if (los && flags.isFlagged(defaultFlag, baseX, baseY, startX, startY, z, CollisionFlag.OBJECT))
-            return Route(emptyList(), alternative = false, success = false)
+            return FAILED_ROUTE
 
         val endX = coordinate(localDestX, localSrcX, destWidth)
         val endY = coordinate(localDestY, localSrcY, destHeight)
 
-        if (startX == endX && startY == endY) return Route(emptyList(), alternative = false, success = true)
+        if (startX == endX && startY == endY) return SUCCESSFUL_ROUTE
 
         val deltaX = endX - startX
         val deltaY = endY - startY
@@ -136,7 +136,7 @@ public class LineValidator(
         var xFlags = if (travelEast) flagWest else flagEast
         var yFlags = if (travelNorth) flagSouth else flagNorth
 
-        val coords = mutableListOf<RouteCoordinates>()
+        val coords = ArrayDeque<RouteCoordinates>()
 
         if (abs(deltaX) > abs(deltaY)) {
             val offsetX = if (travelEast) 1 else -1
@@ -243,7 +243,8 @@ public class LineValidator(
     }
 
     private companion object {
-
+        private val FAILED_ROUTE = Route(ArrayDeque(), alternative = false, success = false)
+        private val SUCCESSFUL_ROUTE = Route(ArrayDeque(), alternative = false, success = true)
         private const val SIGHT_BLOCKED_NORTH = OBJECT_PROJECTILE_BLOCKER or WALL_NORTH_PROJECTILE_BLOCKER
         private const val SIGHT_BLOCKED_EAST = OBJECT_PROJECTILE_BLOCKER or WALL_EAST_PROJECTILE_BLOCKER
         private const val SIGHT_BLOCKED_SOUTH = OBJECT_PROJECTILE_BLOCKER or WALL_SOUTH_PROJECTILE_BLOCKER

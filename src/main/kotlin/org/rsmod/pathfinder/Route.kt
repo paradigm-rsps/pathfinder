@@ -3,7 +3,7 @@
 package org.rsmod.pathfinder
 
 public data class Route(
-    public val coords: List<RouteCoordinates>,
+    public val coords: ArrayDeque<RouteCoordinates>,
     public val alternative: Boolean,
     public val success: Boolean
 ) : List<RouteCoordinates> by coords {
@@ -12,7 +12,8 @@ public data class Route(
         get() = !success
 }
 
-public inline class RouteCoordinates(public val packed: Int) {
+@JvmInline
+public value class RouteCoordinates(public val packed: Int) {
 
     public val x: Int
         get() = packed and 0xFFFF

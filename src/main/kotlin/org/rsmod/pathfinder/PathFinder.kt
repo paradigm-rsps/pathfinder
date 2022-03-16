@@ -13,6 +13,7 @@ private const val DEFAULT_OBJ_ROT = 10
 private const val DEFAULT_OBJ_SHAPE = -1
 private const val DEFAULT_MOVE_NEAR_FLAG = true
 private const val DEFAULT_ACCESS_BITMASK = 0
+private const val DEFAULT_EXTRA_FLAG_TO_CHECK = 0
 
 public interface PathFinder {
 
@@ -30,6 +31,7 @@ public interface PathFinder {
         moveNear: Boolean = DEFAULT_MOVE_NEAR_FLAG,
         accessBitMask: Int = DEFAULT_ACCESS_BITMASK,
         maxTurns: Int = DEFAULT_MAX_TURNS,
+        extraFlagToCheck: Int = DEFAULT_EXTRA_FLAG_TO_CHECK,
         collision: CollisionStrategy = CollisionStrategies.Normal,
         reachStrategy: ReachStrategy = DefaultReachStrategy
     ): Route
