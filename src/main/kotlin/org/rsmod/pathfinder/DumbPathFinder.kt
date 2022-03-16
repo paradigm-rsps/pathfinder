@@ -232,7 +232,7 @@ public class DumbPathFinder(
         return getDirection(xOff, yOff)
     }
 
-    private companion object {
+    internal companion object {
         private val SUCCESSFUL_ROUTE = Route(ArrayDeque(), alternative = false, success = true)
         private val FAILED_ROUTE = Route(ArrayDeque(), alternative = false, success = false)
         private val allDirections = listOf(South, North, West, East, SouthWest, NorthWest, SouthEast, NorthEast)
