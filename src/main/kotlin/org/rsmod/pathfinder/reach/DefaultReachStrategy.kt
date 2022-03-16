@@ -16,13 +16,11 @@ public object DefaultReachStrategy : ReachStrategy {
     override fun reached(
         flags: Array<IntArray?>,
         defaultFlag: Int,
-        baseX: Int,
-        baseY: Int,
+        x: Int,
+        y: Int,
         z: Int,
-        localSrcX: Int,
-        localSrcY: Int,
-        localDestX: Int,
-        localDestY: Int,
+        destX: Int,
+        destY: Int,
         destWidth: Int,
         destHeight: Int,
         srcSize: Int,
@@ -31,7 +29,7 @@ public object DefaultReachStrategy : ReachStrategy {
         accessBitMask: Int,
     ): Boolean {
         val exitStrategy = shape.exitStrategy
-        if (exitStrategy != RECTANGLE_EXCLUSIVE_STRATEGY && localSrcX == localDestX && localSrcY == localDestY) {
+        if (exitStrategy != RECTANGLE_EXCLUSIVE_STRATEGY && x == destX && y == destY) {
             return true
         }
 
@@ -39,13 +37,11 @@ public object DefaultReachStrategy : ReachStrategy {
             WALL_STRATEGY -> reachWall(
                 flags,
                 defaultFlag,
-                baseX,
-                baseY,
+                x,
+                y,
                 z,
-                localSrcX,
-                localSrcY,
-                localDestX,
-                localDestY,
+                destX,
+                destY,
                 srcSize,
                 shape,
                 rotation
@@ -53,13 +49,11 @@ public object DefaultReachStrategy : ReachStrategy {
             WALL_DECO_STRATEGY -> reachWallDeco(
                 flags,
                 defaultFlag,
-                baseX,
-                baseY,
+                x,
+                y,
                 z,
-                localSrcX,
-                localSrcY,
-                localDestX,
-                localDestY,
+                destX,
+                destY,
                 srcSize,
                 shape,
                 rotation
@@ -67,14 +61,12 @@ public object DefaultReachStrategy : ReachStrategy {
             RECTANGLE_STRATEGY -> reachRectangle(
                 flags,
                 defaultFlag,
-                baseX,
-                baseY,
+                x,
+                y,
                 z,
                 accessBitMask,
-                localSrcX,
-                localSrcY,
-                localDestX,
-                localDestY,
+                destX,
+                destY,
                 srcSize,
                 destWidth,
                 destHeight
@@ -82,14 +74,12 @@ public object DefaultReachStrategy : ReachStrategy {
             RECTANGLE_EXCLUSIVE_STRATEGY -> reachExclusiveRectangle(
                 flags,
                 defaultFlag,
-                baseX,
-                baseY,
+                x,
+                y,
                 z,
                 accessBitMask,
-                localSrcX,
-                localSrcY,
-                localDestX,
-                localDestY,
+                destX,
+                destY,
                 srcSize,
                 destWidth,
                 destHeight

@@ -6,12 +6,10 @@ package org.rsmod.pathfinder.bound
 internal fun reachExclusiveRectangle(
     flags: Array<IntArray?>,
     defaultFlag: Int,
-    baseX: Int,
-    baseY: Int,
+    x: Int,
+    y: Int,
     z: Int,
     accessBitMask: Int,
-    srcX: Int,
-    srcY: Int,
     destX: Int,
     destY: Int,
     srcSize: Int,
@@ -19,16 +17,14 @@ internal fun reachExclusiveRectangle(
     destHeight: Int
 ): Boolean = when {
     srcSize > 1 -> {
-        if (RectangleBoundaryUtils.collides(srcX, srcY, destX, destY, srcSize, srcSize, destWidth, destHeight)) false
+        if (RectangleBoundaryUtils.collides(x, y, destX, destY, srcSize, srcSize, destWidth, destHeight)) false
         else RectangleBoundaryUtils.reachRectangleN(
             flags,
             defaultFlag,
-            baseX,
-            baseY,
+            x,
+            y,
             z,
             accessBitMask,
-            srcX,
-            srcY,
             destX,
             destY,
             srcSize,
@@ -38,16 +34,14 @@ internal fun reachExclusiveRectangle(
         )
     }
     else -> {
-        if (RectangleBoundaryUtils.collides(srcX, srcY, destX, destY, srcSize, srcSize, destWidth, destHeight)) false
+        if (RectangleBoundaryUtils.collides(x, y, destX, destY, srcSize, srcSize, destWidth, destHeight)) false
         else RectangleBoundaryUtils.reachRectangle1(
             flags,
             defaultFlag,
-            baseX,
-            baseY,
+            x,
+            y,
             z,
             accessBitMask,
-            srcX,
-            srcY,
             destX,
             destY,
             destWidth,
