@@ -19,7 +19,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate", "DuplicatedCode")
 
 package org.rsmod.pathfinder
 
@@ -136,8 +136,6 @@ public class LineValidator(
         var xFlags = if (travelEast) flagWest else flagEast
         var yFlags = if (travelNorth) flagSouth else flagNorth
 
-        val coords = ArrayDeque<RouteCoordinates>()
-
         if (abs(deltaX) > abs(deltaY)) {
             val offsetX = if (travelEast) 1 else -1
             val offsetY = if (travelNorth) 0 else -1
@@ -152,7 +150,7 @@ public class LineValidator(
 
                 if (los && currX == endX && currY == endY) xFlags = xFlags and OBJECT_PROJECTILE_BLOCKER.inv()
                 if (flags.isFlagged(defaultFlag, baseX, baseY, currX, currY, z, xFlags)) {
-                    return Route(coords, alternative = false, success = false)
+                    return FAILED_ROUTE
                 }
 
                 scaledY += tangent
@@ -160,7 +158,7 @@ public class LineValidator(
                 val nextY = scaleDown(scaledY)
                 if (los && currX == endX && nextY == endY) yFlags = yFlags and OBJECT_PROJECTILE_BLOCKER.inv()
                 if (nextY != currY && flags.isFlagged(defaultFlag, baseX, baseY, currX, nextY, z, yFlags)) {
-                    return Route(coords, alternative = false, success = false)
+                    return FAILED_ROUTE
                 }
             }
         } else {
@@ -176,7 +174,7 @@ public class LineValidator(
                 val currX = scaleDown(scaledX)
                 if (los && currX == endX && currY == endY) yFlags = yFlags and OBJECT_PROJECTILE_BLOCKER.inv()
                 if (flags.isFlagged(defaultFlag, baseX, baseY, currX, currY, z, yFlags)) {
-                    return Route(coords, alternative = false, success = false)
+                    return FAILED_ROUTE
                 }
 
                 scaledX += tangent
@@ -184,11 +182,11 @@ public class LineValidator(
                 val nextX = scaleDown(scaledX)
                 if (los && nextX == endX && currY == endY) xFlags = xFlags and OBJECT_PROJECTILE_BLOCKER.inv()
                 if (nextX != currX && flags.isFlagged(defaultFlag, baseX, baseY, nextX, currY, z, xFlags)) {
-                    return Route(coords, alternative = false, success = false)
+                    return FAILED_ROUTE
                 }
             }
         }
-        return Route(coords, alternative = false, success = true)
+        return SUCCESSFUL_ROUTE
     }
 
     private fun coordinate(a: Int, b: Int, size: Int): Int {
