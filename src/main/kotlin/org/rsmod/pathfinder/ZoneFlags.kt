@@ -39,10 +39,19 @@ public class ZoneFlags {
      * To convert from absolute coordinates to zone coordinates, divide the x and y values
      * each by 8(the size of one zone).
      * Example:
-     * Converting absolute coordinates [3251, 9422, 1] to [zoneCoords]
+     * Converting absolute coordinates [3251, 9422, 1] to [zoneCoords] produces [406, 1177, 1].
      */
     public inline fun destroy(zoneCoords: ZoneCoords) {
         flags[zoneCoords.packedCoords] = null
+    }
+
+    /**
+     * Gets the flag at the absolute coordinates [x, y, z], returning the [default] if the zone is not allocated.
+     */
+    public inline operator fun get(x: Int, y: Int, z: Int, default: Int = 0): Int {
+        val zoneCoords = ZoneCoords(x shr 3, y shr 3, z)
+        val array = flags[zoneCoords.packedCoords] ?: return default
+        return array[zoneLocal(x, y)]
     }
 
     /**
@@ -76,45 +85,28 @@ public class ZoneFlags {
      * Gets the flag at the absolute coordinates, returning the [default] if the zone is not allocated.
      */
     public inline operator fun get(absoluteCoords: AbsoluteCoords, default: Int = 0): Int {
-        val zoneCoords = absoluteCoords.toZoneCoords()
-        val array = flags[zoneCoords.packedCoords] ?: return default
-        return array[zoneLocal(absoluteCoords.x, absoluteCoords.y)]
+        return get(absoluteCoords.x, absoluteCoords.y, absoluteCoords.z, default)
     }
 
     /**
      * Sets the flag at the absolute coordinates to [flag].
      */
     public inline operator fun set(absoluteCoords: AbsoluteCoords, flag: Int) {
-        alloc(absoluteCoords.toZoneCoords())[zoneLocal(absoluteCoords.x, absoluteCoords.y)] = flag
+        set(absoluteCoords.x, absoluteCoords.y, absoluteCoords.z, flag)
     }
 
     /**
      * Adds the [flag] bits to the existing flag at the absolute coordinates.
      */
     public inline fun add(absoluteCoords: AbsoluteCoords, flag: Int) {
-        val flags = alloc(absoluteCoords.toZoneCoords())
-        val index = zoneLocal(absoluteCoords.x, absoluteCoords.y)
-        val cur = flags[index]
-        flags[index] = cur or flag
+        add(absoluteCoords.x, absoluteCoords.y, absoluteCoords.z, flag)
     }
 
     /**
      * Removes the [flag] bits from the existing flag at the absolute coordinates.
      */
     public inline fun remove(absoluteCoords: AbsoluteCoords, flag: Int) {
-        val flags = alloc(absoluteCoords.toZoneCoords())
-        val index = zoneLocal(absoluteCoords.x, absoluteCoords.y)
-        val cur = flags[index]
-        flags[index] = cur and flag.inv()
-    }
-
-    /**
-     * Gets the flag at the absolute coordinates [x, y, z], returning the [default] if the zone is not allocated.
-     */
-    public inline operator fun get(x: Int, y: Int, z: Int, default: Int = 0): Int {
-        val zoneCoords = ZoneCoords(x shr 3, y shr 3, z)
-        val array = flags[zoneCoords.packedCoords] ?: return default
-        return array[zoneLocal(x, y)]
+        remove(absoluteCoords.x, absoluteCoords.y, absoluteCoords.z, flag)
     }
 
     public inline fun zoneLocal(x: Int, y: Int): Int = (x and 0x7) or ((y and 0x7) shl 3)
