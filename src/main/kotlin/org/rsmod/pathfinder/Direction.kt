@@ -454,7 +454,7 @@ internal object SouthEast : Direction(1, -1) {
                 ) ||
                 !collisionStrategy.canMove(
                         flags[x + mid, y - 1, level, defaultFlag],
-                        CollisionFlag.BLOCK_NORTH_AND_SOUTH_WEST or extraFlag
+                        CollisionFlag.BLOCK_NORTH_EAST_AND_WEST or extraFlag
                     )
             ) {
                 return true
