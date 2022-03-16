@@ -16,6 +16,8 @@ private const val DEFAULT_SRC_DIRECTION_VALUE = 99
 private const val MAX_ALTERNATIVE_ROUTE_LOWEST_COST = 1000
 private const val MAX_ALTERNATIVE_ROUTE_SEEK_RANGE = 100
 private const val MAX_ALTERNATIVE_ROUTE_DISTANCE_FROM_DESTINATION = 10
+private const val DEFAULT_MOVE_NEAR_FLAG = true
+private const val DEFAULT_ROUTE_BLOCKER_FLAGS = false
 
 public class SmartPathFinder(
     private val resetOnSearch: Boolean = DEFAULT_RESET_ON_SEARCH,
@@ -29,9 +31,10 @@ public class SmartPathFinder(
     private var bufWriterIndex: Int = 0,
     private var currLocalX: Int = 0,
     private var currLocalY: Int = 0,
-    private val useRouteBlockerFlags: Boolean = false,
+    private val useRouteBlockerFlags: Boolean = DEFAULT_ROUTE_BLOCKER_FLAGS,
     private val flags: Array<IntArray?>,
     private val defaultFlag: Int,
+    private val moveNear: Boolean = DEFAULT_MOVE_NEAR_FLAG,
 ) : PathFinder {
 
     public override fun findPath(
@@ -45,7 +48,6 @@ public class SmartPathFinder(
         destHeight: Int,
         objRot: Int,
         objShape: Int,
-        moveNear: Boolean,
         accessBitMask: Int,
         maxTurns: Int,
         extraFlagToCheck: Int,

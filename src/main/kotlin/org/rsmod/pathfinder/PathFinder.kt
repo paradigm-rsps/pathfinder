@@ -11,7 +11,6 @@ private const val DEFAULT_DEST_HEIGHT = 0
 private const val DEFAULT_MAX_TURNS = 25
 private const val DEFAULT_OBJ_ROT = 10
 private const val DEFAULT_OBJ_SHAPE = -1
-private const val DEFAULT_MOVE_NEAR_FLAG = true
 private const val DEFAULT_ACCESS_BITMASK = 0
 private const val DEFAULT_EXTRA_FLAG_TO_CHECK = 0
 
@@ -28,7 +27,6 @@ public interface PathFinder {
         destHeight: Int = DEFAULT_DEST_HEIGHT,
         objRot: Int = DEFAULT_OBJ_ROT,
         objShape: Int = DEFAULT_OBJ_SHAPE,
-        moveNear: Boolean = DEFAULT_MOVE_NEAR_FLAG,
         accessBitMask: Int = DEFAULT_ACCESS_BITMASK,
         maxTurns: Int = DEFAULT_MAX_TURNS,
         extraFlagToCheck: Int = DEFAULT_EXTRA_FLAG_TO_CHECK,

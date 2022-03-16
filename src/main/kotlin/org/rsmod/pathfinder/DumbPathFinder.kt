@@ -28,7 +28,6 @@ public class DumbPathFinder(
         destHeight: Int,
         objRot: Int,
         objShape: Int,
-        moveNear: Boolean,
         accessBitMask: Int,
         maxTurns: Int,
         extraFlagToCheck: Int,
