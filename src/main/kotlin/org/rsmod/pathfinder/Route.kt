@@ -5,7 +5,8 @@ package org.rsmod.pathfinder
 public data class Route(
     public val coords: ArrayDeque<RouteCoordinates>,
     public val alternative: Boolean,
-    public val success: Boolean
+    public val success: Boolean,
+    public val pathCoords: List<RouteCoordinates> = emptyList(),
 ) : List<RouteCoordinates> by coords {
 
     public val failed: Boolean

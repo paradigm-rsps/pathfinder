@@ -178,18 +178,24 @@ public class SmartPathFinder(
             }
         }
         val coordinates = ArrayDeque<RouteCoordinates>(initialDequeSize)
+        val pathCoordinates = ArrayList<RouteCoordinates>(initialDequeSize * 10)
+
         var nextDir = directions[currLocalX, currLocalY]
         var currDir = -1
         var turns = 0
         for (i in 0 until searchMapSize * searchMapSize) {
             if (currLocalX == localSrcX && currLocalY == localSrcY) break
+            val coords = RouteCoordinates(currLocalX + baseX, currLocalY + baseY)
             if (currDir != nextDir) {
                 turns++
-                if (coordinates.size >= maxTurns) coordinates.removeLast()
-                val coords = RouteCoordinates(currLocalX + baseX, currLocalY + baseY)
+                if (coordinates.size >= maxTurns) {
+                    coordinates.removeLast()
+                    pathCoordinates.removeLast()
+                }
                 coordinates.addFirst(coords)
                 currDir = nextDir
             }
+            pathCoordinates.add(0, coords)
             if ((currDir and DirectionFlag.EAST) != 0) {
                 currLocalX++
             } else if ((currDir and DirectionFlag.WEST) != 0) {
@@ -202,7 +208,7 @@ public class SmartPathFinder(
             }
             nextDir = directions[currLocalX, currLocalY]
         }
-        return Route(coordinates, alternative = !pathFound, success = true)
+        return Route(coordinates, alternative = !pathFound, success = true, pathCoords = pathCoordinates)
     }
 
     private fun findPath1(
